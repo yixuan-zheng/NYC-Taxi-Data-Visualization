@@ -19,6 +19,7 @@ It’s intentionally simple — you are **highly encouraged** to expand it (more
 ├── map.html
 ├── README.md
 └── timeseries.html
+```
 
 ### What each part is
 
