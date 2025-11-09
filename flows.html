@@ -1,0 +1,547 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>NYC Taxi Trips — zone-to-zone on click</title>
+<style>
+  :root {
+    /* page is white-ish now */
+    --page-bg:#f8fafc;
+    --panel:#ffffff;
+    --ink:#0f172a;
+    --muted:#64748b;
+
+    /* map should be the slightly darker gray */
+    --map-bg:#e5e7eb;
+    --zone-border:#98a3b3;
+  }
+  html,body{
+    height:100%;
+    margin:0;
+    background:var(--page-bg);
+    color:var(--ink);
+    font:15px/1.5 system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;
+  }
+  .wrap{
+    display:grid;
+    grid-template-columns:360px 1fr;
+    gap:12px;
+    height:100%;
+    padding:12px;
+    box-sizing:border-box;
+  }
+  .panel{
+    background:var(--panel);
+    border-radius:14px;
+    padding:14px;
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+    box-shadow:0 10px 25px rgba(15,23,42,.05);
+  }
+  .header{display:flex;justify-content:space-between;gap:12px}
+  .title{font-weight:700}
+  .section{display:flex;flex-direction:column;gap:8px}
+  .row{display:flex;align-items:center;gap:8px}
+  .row label{min-width:110px}
+  input[type="range"]{width:100%}
+  select{
+    background:#eef2ff;
+    color:var(--ink);
+    border:1px solid #d4d4d8;
+    border-radius:10px;
+    padding:6px 10px;
+  }
+  .hint{font-size:12px;color:var(--muted)}
+  .map{
+    position:relative;
+    border-radius:16px;
+    overflow:hidden;
+    background:var(--map-bg);
+    /* outer shadow to separate from white bg */
+    box-shadow:
+      0 18px 50px rgba(15,23,42,.08),
+      0 0 0 1px rgba(148,163,184,.25);
+  }
+  .tooltip{
+    position:absolute;pointer-events:none;background:#ffffff;color:#0f172a;padding:8px 10px;border-radius:8px;
+    font-size:12px;box-shadow:0 8px 20px rgba(15,23,42,.18);opacity:0;transition:opacity .1s;border:1px solid rgba(148,163,184,.25);
+  }
+  .zone{stroke:var(--zone-border);stroke-width:.7}
+  /* lighter dots so they don't steal focus */
+  .node{
+    fill:#bcc0c6;
+    stroke:#ffffff;
+    stroke-width:1;
+    cursor:pointer;
+    transition:opacity .1s
+  }
+  .node.selected{fill:#ffffff;stroke:#0f172a;stroke-width:1.2}
+  .edge{fill:none;pointer-events:stroke}
+  .dbg{font-size:12px;color:var(--muted)}
+  .legend-box{
+    background:#f1f5f9;
+    border:1px solid rgba(148,163,184,.35);
+    border-radius:10px;
+    padding:8px 10px;
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+  }
+  .legend-bar{
+    height:10px;
+    border-radius:9999px;
+    /* deeper colors */
+    background:linear-gradient(to right, #0b4f9c, #cbd5e1, #991b1b);
+  }
+  .legend-labels{
+    display:flex;
+    justify-content:space-between;
+    font-size:11px;
+    color:#475569;
+  }
+</style>
+
+<div class="wrap">
+  <!-- controls -->
+  <div class="panel">
+    <div class="header">
+      <div>
+        <div class="title">NYC Taxi Trips — click to inspect flows</div>
+        <div class="hint">
+          1) Click a zone → see all zones it exchanged trips with at that hour.<br>
+          2) Click a second zone <b>or a route</b> → focus on that single pair.<br>
+          3) Click empty map → reset. Scroll / drag to zoom & pan.
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="row">
+        <label for="hour">Hour of day</label>
+        <input id="hour" type="range" min="0" max="23" value="8" step="1" />
+        <span id="hourLabel" style="min-width:54px;text-align:right">08:00</span>
+      </div>
+      <div class="hint">Changing hour refreshes the current focus.</div>
+    </div>
+
+    <div class="section">
+      <label for="boroughFilter">Show zones in borough</label>
+      <select id="boroughFilter">
+        <option value="__all__">All boroughs</option>
+        <option>Manhattan</option>
+        <option>Brooklyn</option>
+        <option>Queens</option>
+        <option>The Bronx</option>
+        <option>Staten Island</option>
+      </select>
+      <div class="hint">Picking one will highlight that borough tint and hide others.</div>
+    </div>
+
+    <div class="section">
+      <div class="hint" id="summary">No zone selected. Click a dot.</div>
+      <div class="dbg" id="dbg"></div>
+    </div>
+
+    <div class="section">
+      <div class="legend-box">
+        <div style="font-weight:600;font-size:12px;">Flow intensity</div>
+        <div class="legend-bar"></div>
+        <div class="legend-labels">
+          <span id="legendLow">low</span>
+          <span id="legendMid">mid</span>
+          <span id="legendHigh">high</span>
+        </div>
+        <div class="hint" id="legendNote">Scaled to selected zone & hour.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- map -->
+  <div class="map" id="map">
+    <svg id="svg" width="100%" height="100%"></svg>
+    <div id="tip" class="tooltip" aria-hidden="true"></div>
+  </div>
+</div>
+
+<script src="https://d3js.org/d3.v7.min.js"></script>
+<script>
+(async function(){
+  function normalizeBorough(b){
+    if(!b) return "Unknown";
+    const s = String(b).trim().toLowerCase();
+    if (s.includes("manhattan")) return "Manhattan";
+    if (s.includes("brooklyn"))  return "Brooklyn";
+    if (s.includes("queens"))    return "Queens";
+    if (s.includes("bronx"))     return "The Bronx";
+    if (s.includes("staten"))    return "Staten Island";
+    return b;
+  }
+  function fmtHour(h){ return h.toString().padStart(2,"0")+":00"; }
+  function arrowPath(p1, p2){
+    const mx=(p1[0]+p2[0])/2;
+    const my=(p1[1]+p2[1])/2 - 14;
+    const p=d3.path();
+    p.moveTo(p1[0],p1[1]);
+    p.quadraticCurveTo(mx,my,p2[0],p2[1]);
+    return p.toString();
+  }
+
+  // Your borough palette (light, transparent)
+  const BOROUGH_COLORS = {
+    "Manhattan": "rgba(120, 81, 169, 0.20)",        // Royal Purple, light
+    "Brooklyn": "rgba(204, 85, 32, 0.20)",          // Burnt Orange, light
+    "Queens": "rgba(15, 163, 155, 0.20)",           // Vibrant Teal-Green, light
+    "The Bronx": "rgba(244, 165, 44, 0.20)",        // Bright Gold/Amber, light
+    "Staten Island": "rgba(67, 104, 74, 0.20)",     // Deep Moss w/ olive, light
+    "Unknown": "rgba(148,163,184,0.12)"
+  };
+  const BOROUGH_HIGHLIGHT = {
+    "Manhattan": "rgba(120, 81, 169, 0.60)",
+    "Brooklyn": "rgba(204, 85, 32, 0.60)",
+    "Queens": "rgba(15, 163, 155, 0.60)",
+    "The Bronx": "rgba(244, 165, 44, 0.60)",
+    "Staten Island": "rgba(67, 104, 74, 0.60)",
+    "Unknown": "rgba(148,163,184,0.35)"
+  };
+
+  const svg = d3.select("#svg");
+  const tip = d3.select("#tip");
+  const summary = d3.select("#summary");
+  const dbg = d3.select("#dbg");
+  const legendNote = d3.select("#legendNote");
+
+  const mapEl = document.getElementById("map");
+  const width = mapEl.clientWidth;
+  const height = mapEl.clientHeight || window.innerHeight - 24;
+  svg.attr("viewBox", [0,0,width,height]).style("background","transparent");
+
+  // zoom root
+  const gRoot = svg.append("g").attr("class","root");
+  const gZones = gRoot.append("g");
+  const gEdges = gRoot.append("g");
+  const gNodes = gRoot.append("g");
+
+  const zoom = d3.zoom()
+    .scaleExtent([1, 6])
+    .on("zoom", (event) => {
+      gRoot.attr("transform", event.transform);
+    });
+  svg.call(zoom);
+
+  const hourEl = document.getElementById("hour");
+  const hourLabel = document.getElementById("hourLabel");
+  const boroFilterEl = document.getElementById("boroughFilter");
+
+  const [zones, flows, lookup] = await Promise.all([
+    d3.json("data/taxi_zones.geojson"),
+    d3.csv("data/flows.csv", d3.autoType),
+    d3.csv("data/taxi_zone_lookup.csv").catch(() => [])
+  ]);
+
+  const csvLookup = new Map();
+  lookup.forEach(r => {
+    const id = +r.LocationID;
+    csvLookup.set(id, {
+      zone: r.Zone,
+      borough: normalizeBorough(r.Borough)
+    });
+  });
+
+  const projection = d3.geoMercator().fitSize([width, height], zones);
+  const path = d3.geoPath(projection);
+
+  const idTo = new Map();
+  zones.features.forEach(f => {
+    const id = +f.properties.LocationID;
+    const fromCsv = csvLookup.get(id);
+    const zoneName = fromCsv ? fromCsv.zone : (f.properties.Zone || ("Zone "+id));
+    const borough = fromCsv ? fromCsv.borough : normalizeBorough(f.properties.Borough);
+    idTo.set(id, {
+      id,
+      zone: zoneName,
+      borough,
+      feature: f
+    });
+  });
+
+  // draw basemap, now with your borough colors
+  const zonePaths = gZones.selectAll("path.zone")
+    .data(zones.features)
+    .join("path")
+    .attr("class","zone")
+    .attr("data-id", d => d.properties.LocationID)
+    .attr("data-borough", d => normalizeBorough(d.properties.Borough))
+    .attr("fill", d => {
+      const bd = normalizeBorough(d.properties.Borough);
+      return BOROUGH_COLORS[bd] || BOROUGH_COLORS["Unknown"];
+    })
+    .attr("d", path);
+
+  // centroids
+  const zonePoints = zones.features.map(f => {
+    const id = +f.properties.LocationID;
+    const c = path.centroid(f);
+    const lk = idTo.get(id);
+    return {
+      id,
+      x: c[0],
+      y: c[1],
+      zone: lk.zone,
+      borough: lk.borough
+    };
+  });
+
+  flows.forEach(d => {
+    d.origin_zone = +d.origin_zone;
+    d.destination_zone = +d.destination_zone;
+    d.time_bin = +d.time_bin;
+    d.trip_count = +d.trip_count;
+  });
+
+  // PRECOMPUTE connectivity
+  const connMap = new Map();
+  flows.forEach(row => {
+    const o = row.origin_zone;
+    const d = row.destination_zone;
+    if (!connMap.has(o)) connMap.set(o, new Set());
+    if (!connMap.has(d)) connMap.set(d, new Set());
+    connMap.get(o).add(d);
+    connMap.get(d).add(o);
+  });
+
+  const connectivityArray = Array.from(idTo.keys()).map(id => {
+    const set = connMap.get(id);
+    return {
+      id,
+      degree: set ? set.size : 0
+    };
+  }).sort((a,b) => d3.descending(a.degree, b.degree));
+
+  const nZones = connectivityArray.length;
+  const top5 = Math.ceil(nZones * 0.05);
+  const top10 = Math.ceil(nZones * 0.10);
+  const top20 = Math.ceil(nZones * 0.20);
+  const top40 = Math.ceil(nZones * 0.40);
+
+  const zoneCapMap = new Map();
+  connectivityArray.forEach((entry, idx) => {
+    let cap = Infinity;
+    if (idx < top5) cap = 50;
+    else if (idx < top10) cap = 40;
+    else if (idx < top20) cap = 30;
+    else if (idx < top40) cap = 20;
+    zoneCapMap.set(entry.id, cap);
+  });
+
+  let selectedPrimary = null;
+  let selectedSecondary = null;
+
+  hourLabel.textContent = fmtHour(+hourEl.value);
+
+  const nodesSel = gNodes.selectAll("circle.node")
+    .data(zonePoints)
+    .join("circle")
+    .attr("class","node")
+    .attr("r", 4)
+    .attr("cx", d => d.x)
+    .attr("cy", d => d.y)
+    .on("mouseenter", (event,d) => {
+      tip.style("opacity",1).attr("aria-hidden","false")
+        .style("left",(event.offsetX+10)+"px")
+        .style("top",(event.offsetY+10)+"px")
+        .html(`<b>${d.zone} - ${d.borough}</b>`);
+    })
+    .on("mouseleave", () => {
+      tip.style("opacity",0).attr("aria-hidden","true");
+    })
+    .on("click", (event,d) => {
+      event.stopPropagation();
+      if (selectedPrimary === null) {
+        selectedPrimary = d.id;
+        selectedSecondary = null;
+        renderForPrimary();
+        return;
+      }
+      if (selectedPrimary !== null && selectedSecondary === null) {
+        selectedSecondary = d.id;
+        renderForPrimary();
+        return;
+      }
+      selectedPrimary = d.id;
+      selectedSecondary = null;
+      renderForPrimary();
+    });
+
+  hourEl.addEventListener("input", () => {
+    hourLabel.textContent = fmtHour(+hourEl.value);
+    if (selectedPrimary !== null) {
+      renderForPrimary();
+    }
+  });
+
+  // borough filter with your colors
+  boroFilterEl.addEventListener("change", () => {
+    const b = boroFilterEl.value;
+    if (selectedPrimary !== null) return; // focus mode handles its own visibility
+
+    zonePaths
+      .attr("fill", d => {
+        const bd = normalizeBorough(d.properties.Borough);
+        if (b === "__all__") {
+          // all-borough view = white zones
+          return "#ffffff";
+        }
+        // single-borough view = highlight selected, hide others
+        return bd === b
+          ? (BOROUGH_HIGHLIGHT[bd] || BOROUGH_HIGHLIGHT["Unknown"])
+          : "#ffffff";
+      });
+
+    nodesSel
+      .attr("opacity", d => (b === "__all__" || d.borough === b) ? 1 : 0.2)
+      .attr("pointer-events", d => (b === "__all__" || d.borough === b) ? "auto" : "none");
+  });
+
+  svg.on("click", () => {
+    selectedPrimary = null;
+    selectedSecondary = null;
+    gEdges.selectAll("*").remove();
+    nodesSel
+      .classed("selected", false)
+      .attr("opacity", 1)
+      .attr("pointer-events", "auto");
+    summary.text("No zone selected. Click a dot.");
+    dbg.text("");
+    legendNote.text("Scaled to selected zone & hour.");
+
+    // go back to "all boroughs" look = white
+    zonePaths.attr("fill", "#ffffff");
+    boroFilterEl.value = "__all__";
+  });
+
+  function renderForPrimary() {
+    const hour = +hourEl.value;
+    const primaryId = selectedPrimary;
+    const primary = idTo.get(primaryId);
+    if (!primary) return;
+
+    const relevant = flows.filter(d =>
+      d.time_bin === hour &&
+      (d.origin_zone === primaryId || d.destination_zone === primaryId)
+    );
+
+    const byOther = new Map();
+    for (const row of relevant) {
+      const isOut = row.origin_zone === primaryId;
+      const otherId = isOut ? row.destination_zone : row.origin_zone;
+      if (!byOther.has(otherId)) {
+        byOther.set(otherId, { otherId, outCount:0, inCount:0 });
+      }
+      const ent = byOther.get(otherId);
+      if (isOut) ent.outCount += row.trip_count;
+      else ent.inCount += row.trip_count;
+    }
+
+    const pairsAll = Array.from(byOther.values());
+    pairsAll.forEach(p => p.total = p.outCount + p.inCount);
+
+    const maxTotalAll = d3.max(pairsAll, d => d.total) || 1;
+
+    let pairs = pairsAll;
+    if (selectedSecondary !== null) {
+      pairs = pairsAll.filter(p => p.otherId === selectedSecondary);
+    }
+
+    pairs.sort((a,b) => d3.ascending(a.total, b.total));
+
+    const capForPrimary = zoneCapMap.get(primaryId) ?? Infinity;
+    let shownPairs = pairs;
+    let showingMsg = "";
+    if (selectedSecondary === null && Number.isFinite(capForPrimary)) {
+      if (pairs.length > capForPrimary) {
+        shownPairs = pairs.slice(pairs.length - capForPrimary);
+        showingMsg = ` Showing ${shownPairs.length} of ${pairs.length} for readability.`;
+      }
+    }
+
+    // deeper colors
+    const color = d3.scaleLinear()
+      .domain([0, maxTotalAll * 0.5, maxTotalAll])
+      .range(["#0b4f9c", "#cbd5e1", "#991b1b"]);
+    const widthScale = d3.scaleSqrt()
+      .domain([0, maxTotalAll])
+      .range([1, 5.5]);
+
+    gEdges.selectAll("*").remove();
+
+    const connectedIds = new Set([primaryId, ...shownPairs.map(p => p.otherId)]);
+    nodesSel
+      .attr("opacity", d => connectedIds.has(d.id) ? 1 : 0.08)
+      .attr("pointer-events", d => connectedIds.has(d.id) ? "auto" : "none")
+      .classed("selected", d => d.id === primaryId || d.id === selectedSecondary);
+
+    const routeGroups = gEdges.selectAll("g.route")
+      .data(shownPairs, d => d.otherId)
+      .enter()
+      .append("g")
+      .attr("class","route");
+
+    routeGroups.each(function(d){
+      const g = d3.select(this);
+      const other = idTo.get(d.otherId);
+      if (!other) return;
+      const c1 = zonePoints.find(z => z.id === primaryId);
+      const c2 = zonePoints.find(z => z.id === d.otherId);
+      const strokeCol = color(d.total);
+      const sw = widthScale(d.total);
+      const thePath = arrowPath([c1.x, c1.y], [c2.x, c2.y]);
+
+      g.append("path")
+        .attr("class","edge")
+        .attr("stroke", strokeCol)
+        .attr("stroke-width", sw)
+        .attr("stroke-linecap","round")
+        .attr("stroke-opacity", 0.98)
+        .attr("d", thePath);
+
+      g.append("path")
+        .attr("class","edge-hit")
+        .attr("d", thePath)
+        .attr("fill","none")
+        .attr("stroke","transparent")
+        .attr("stroke-width", Math.max(sw+8, 12))
+        .on("mousemove", (event) => {
+          const baseA = `${primary.zone} - ${primary.borough}`;
+          const baseB = `${other.zone} - ${other.borough}`;
+          let html = `<b>${baseA} ⇄ ${baseB}</b><br>total trips: ${d.total.toLocaleString()}`;
+          if (d.outCount > 0) html += `<br>${baseA} → ${baseB}: ${d.outCount.toLocaleString()}`;
+          if (d.inCount > 0) html += `<br>${baseB} → ${baseA}: ${d.inCount.toLocaleString()}`;
+          tip.style("opacity",1).attr("aria-hidden","false")
+            .style("left",(event.offsetX+12)+"px")
+            .style("top",(event.offsetY+12)+"px")
+            .html(html);
+        })
+        .on("mouseleave", () => {
+          tip.style("opacity",0).attr("aria-hidden","true");
+        })
+        .on("click", (event) => {
+          event.stopPropagation();
+          selectedSecondary = d.otherId;
+          renderForPrimary();
+        });
+    });
+
+    summary.html(() => {
+      const base = `<b>${primary.zone} - ${primary.borough}</b> at ${fmtHour(hour)} — ${pairsAll.length} connected zones.`;
+      return showingMsg ? (base + showingMsg) : base;
+    });
+
+    dbg.text(`Max flow for this zone @ hour: ${maxTotalAll.toLocaleString()}`);
+    legendNote.text(`Scaled 0 → ${maxTotalAll.toLocaleString()} trips for this zone & hour.`);
+  }
+
+  // initial tint
+  boroFilterEl.dispatchEvent(new Event("change"));
+})();
+</script>

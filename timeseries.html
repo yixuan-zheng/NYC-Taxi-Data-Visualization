@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Time-of-day patterns (time-weighted clusters)</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+  <style>
+    :root {
+      --bg: #f6f7fb;
+      --card: #fff;
+      --border: #e7e9ef;
+      --text: #202123;
+      --accent: #3b82f6;
+    }
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }
+    header {
+      padding: 16px 24px 4px;
+      background: #fff;
+      border-bottom: 1px solid #e2e2e2;
+    }
+    h1 {
+      margin: 0;
+      font-size: 20px;
+      font-weight: 600;
+    }
+    .sub {
+      font-size: 13px;
+      margin-top: 4px;
+    }
+    .metrics {
+      display: flex;
+      gap: 16px;
+      padding: 8px 24px 12px;
+      background: #fff;
+    }
+    .metric-card {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 8px 12px;
+      min-width: 120px;
+    }
+    .metric-title {
+      font-size: 11px;
+      text-transform: uppercase;
+      color: #555;
+      letter-spacing: .03em;
+    }
+    .metric-value {
+      font-size: 20px;
+      font-weight: 600;
+      margin-top: 2px;
+    }
+    .layout {
+      display: grid;
+      grid-template-columns: 0.62fr 0.38fr;
+      gap: 16px;
+      padding: 16px 24px 24px;
+      height: calc(100vh - 120px);
+      box-sizing: border-box;
+    }
+    .panel {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    .panel-title {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+    .panel-subtitle {
+      font-size: 12px;
+      margin-bottom: 10px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+    thead {
+      background: #f0f2f8;
+    }
+    th, td {
+      text-align: left;
+      padding: 6px 6px;
+    }
+    th:last-child,
+    td:last-child {
+      text-align: right;
+    }
+    tbody tr {
+      cursor: pointer;
+      border-bottom: 1px solid #f0f2f8;
+    }
+    tbody tr:hover {
+      background: #f4f6ff;
+    }
+    tbody tr.active {
+      background: rgba(59,130,246,0.08);
+    }
+    .note {
+      font-size: 11px;
+      margin-top: 8px;
+    }
+    /* tooltip */
+    #chart-tooltip {
+      position: absolute;
+      pointer-events: none;
+      background: #fff;
+      border: 1px solid #d0d3de;
+      border-radius: 6px;
+      padding: 4px 8px;
+      font-size: 11px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+      display: none;
+      white-space: nowrap;
+      z-index: 10;
+    }
+    /* bold first part in table */
+    .cluster-label-strong {
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Time-of-day patterns (time-weighted clusters)</h1>
+    <div class="sub">
+      Top 10 busiest spatial clusters, but clusters were built with time + space → hourly profiles actually move.
+    </div>
+  </header>
+
+  <div class="metrics" id="metrics"></div>
+
+  <div class="layout">
+    <!-- LEFT: chart -->
+    <div class="panel" style="position:relative;">
+      <div class="panel-title" id="detail-title">Cluster – hourly profile</div>
+      <div class="panel-subtitle">X: hour 0–23 • Y: trip count</div>
+      <div id="detail"></div>
+      <div class="note">
+        Peaks/dips mark busiest and quietest hours for this cluster.
+      </div>
+      <div id="chart-tooltip"></div>
+    </div>
+
+    <!-- RIGHT: table -->
+    <div class="panel">
+      <div class="panel-title">Top 10 clusters</div>
+      <div class="panel-subtitle">Click a cluster to see its 24-hour profile.</div>
+      <div style="overflow-y:auto;">
+        <table id="cluster-table">
+          <thead>
+            <tr>
+              <th style="width:45px;">#</th>
+              <th>Cluster / area</th>
+              <th style="text-align:right;">Total trips</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const csvPath = "data/timeseries.csv";
+    const semanticsPath = "data/cluster_semantics.json";
+    const detailW = 650, detailH = 330;
+
+    // helper: split label into bold part and rest
+    function splitLabel(label) {
+      if (!label) return {strong: "", rest: ""};
+      const parts = label.split(" – ");
+      return {
+        strong: parts[0],
+        rest: parts.slice(1).join(" – ")
+      };
+    }
+
+    Promise.all([
+      d3.csv(csvPath, d3.autoType),
+      d3.json(semanticsPath).catch(() => ({}))
+    ]).then(([data, semantics]) => {
+      data.forEach(d => {
+        d.cluster_id = +d.cluster_id;
+        d.time_bin = +d.time_bin;
+        d.trip_count = +d.trip_count;
+      });
+
+      const byCluster = d3.group(data, d => d.cluster_id);
+
+      const totals = Array.from(byCluster, ([cluster_id, rows]) => ({
+        cluster_id,
+        total_trip: d3.sum(rows, r => r.trip_count)
+      })).sort((a,b) => d3.descending(a.total_trip, b.total_trip));
+
+      const top = totals.slice(0, 10);
+
+      // metrics
+      const totalClusters = totals.length;
+      const hoursCount = d3.rollups(data, v=>v.length, d=>d.time_bin).length;
+      const avgTrip = d3.mean(data, d => d.trip_count);
+      renderMetrics({
+        clustersCount: totalClusters,
+        hoursCount,
+        rowsCount: data.length,
+        avgTrip: Math.round(avgTrip)
+      });
+
+      renderTable(top, byCluster, semantics);
+      if (top.length > 0) {
+        updateDetail(top[0].cluster_id, byCluster, semantics);
+        highlightRow(top[0].cluster_id);
+      }
+    });
+
+    function renderMetrics(stats) {
+      const wrap = d3.select("#metrics");
+      const cards = [
+        {title: "Clusters (total)", value: stats.clustersCount},
+        {title: "Hours", value: stats.hoursCount},
+        {title: "Rows", value: stats.rowsCount},
+        {title: "Avg trip count", value: stats.avgTrip}
+      ];
+      wrap.selectAll(".metric-card")
+        .data(cards)
+        .enter()
+        .append("div")
+        .attr("class", "metric-card")
+        .html(d => `
+          <div class="metric-title">${d.title}</div>
+          <div class="metric-value">${d.value}</div>
+        `);
+    }
+
+    // turn semantics into nice label
+    function readableLabel(clusterId, semantics) {
+      const info = semantics[clusterId];
+      if (!info) return `Cluster ${clusterId}`;
+      const zones = Array.isArray(info.top_zones) ? info.top_zones.filter(Boolean) : [];
+      const zoneSnippet = zones.length ? " – " + zones.slice(0,2).join(", ") : "";
+      return `${info.label}${zoneSnippet}`;
+    }
+
+    function renderTable(topList, byCluster, semantics) {
+      const tbody = d3.select("#cluster-table tbody");
+      const rows = tbody.selectAll("tr")
+        .data(topList)
+        .enter()
+        .append("tr")
+        .attr("data-cluster", d => d.cluster_id)
+        .on("click", (event, d) => {
+          updateDetail(d.cluster_id, byCluster, semantics);
+          highlightRow(d.cluster_id);
+        });
+
+      rows.append("td").text((d,i) => i+1);
+      rows.append("td").html(d => {
+        const label = readableLabel(d.cluster_id, semantics);
+        const parts = splitLabel(label);
+        return `<span class="cluster-label-strong">${parts.strong}</span>${parts.rest ? " – " + parts.rest : ""}`;
+      });
+      rows.append("td")
+        .style("text-align","right")
+        .text(d => d3.format(",")(d.total_trip));
+    }
+
+    function highlightRow(clusterId) {
+      d3.selectAll("#cluster-table tbody tr").classed("active", false);
+      d3.select(`#cluster-table tbody tr[data-cluster='${clusterId}']`).classed("active", true);
+    }
+
+    function updateDetail(clusterId, byCluster, semantics) {
+      const rows = byCluster.get(clusterId) || [];
+
+      // aggregate to one value per hour
+      const aggregated = d3.rollups(
+        rows,
+        v => d3.sum(v, d => d.trip_count),
+        d => d.time_bin
+      )
+      .map(([time_bin, trip_count]) => ({ time_bin: +time_bin, trip_count: +trip_count }))
+      .sort((a,b) => d3.ascending(a.time_bin, b.time_bin));
+
+      // clear chart
+      d3.select("#detail").selectAll("*").remove();
+
+      const margin = {top: 20, right: 20, bottom: 45, left: 90};
+      const svg = d3.select("#detail")
+        .append("svg")
+        .attr("width", detailW)
+        .attr("height", detailH);
+
+      const innerW = detailW - margin.left - margin.right;
+      const innerH = detailH - margin.top - margin.bottom;
+
+      const g = svg.append("g")
+        .attr("transform", `translate(${margin.left},${margin.top})`);
+
+      const x = d3.scaleLinear()
+        .domain([0, 23])
+        .range([0, innerW]);
+
+      const y = d3.scaleLinear()
+        .domain([0, d3.max(aggregated, d => d.trip_count) || 1])
+        .nice()
+        .range([innerH, 0]);
+
+      const line = d3.line()
+        .x(d => x(d.time_bin))
+        .y(d => y(d.trip_count));
+
+      // path
+      g.append("path")
+        .datum(aggregated)
+        .attr("fill", "none")
+        .attr("stroke", "#3b82f6")
+        .attr("stroke-width", 2)
+        .attr("d", line);
+
+      // axes
+      const xAxis = d3.axisBottom(x).ticks(12).tickFormat(d => d);
+      g.append("g")
+        .attr("transform", `translate(0,${innerH})`)
+        .call(xAxis);
+      g.append("text")
+        .attr("x", innerW / 2)
+        .attr("y", innerH + 32)
+        .attr("text-anchor", "middle")
+        .style("font-size", "12px")
+        .text("hour of day (0–23)");
+
+      const yAxis = d3.axisLeft(y).ticks(5).tickFormat(d3.format(","));
+      g.append("g").call(yAxis);
+      g.append("text")
+        .attr("x", -innerH / 2)
+        .attr("y", -60)
+        .attr("transform", "rotate(-90)")
+        .attr("text-anchor", "middle")
+        .style("font-size", "12px")
+        .text("trip count");
+
+      // mark max & min
+      if (aggregated.length) {
+        const maxPt = aggregated.reduce((a,b) => b.trip_count > a.trip_count ? b : a, aggregated[0]);
+        const minPt = aggregated.reduce((a,b) => b.trip_count < a.trip_count ? b : a, aggregated[0]);
+
+        // max point
+        g.append("circle")
+          .attr("cx", x(maxPt.time_bin))
+          .attr("cy", y(maxPt.trip_count))
+          .attr("r", 4)
+          .attr("fill", "#ef4444");
+
+        g.append("text")
+          .attr("x", x(maxPt.time_bin) + 6)
+          .attr("y", y(maxPt.trip_count) - 6)
+          .style("font-size", "10px")
+          .text(`peak traffic`);
+
+        // min point
+        g.append("circle")
+          .attr("cx", x(minPt.time_bin))
+          .attr("cy", y(minPt.trip_count))
+          .attr("r", 4)
+          .attr("fill", "#10b981");
+
+        g.append("text")
+          .attr("x", x(minPt.time_bin) + 6)
+          .attr("y", y(minPt.trip_count) + 12)
+          .style("font-size", "10px")
+          .text(`low traffic`);
+      }
+
+      // tooltip elements
+      const tooltip = d3.select("#chart-tooltip");
+      const hoverLine = g.append("line")
+        .attr("stroke", "#9ca3af")
+        .attr("stroke-width", 1)
+        .attr("y1", 0)
+        .attr("y2", innerH)
+        .style("opacity", 0);
+
+      const hoverCircle = g.append("circle")
+        .attr("r", 4)
+        .attr("fill", "#3b82f6")
+        .attr("stroke", "#fff")
+        .attr("stroke-width", 1.5)
+        .style("opacity", 0);
+
+      // transparent rect for mouse capture
+      g.append("rect")
+        .attr("width", innerW)
+        .attr("height", innerH)
+        .attr("fill", "transparent")
+        .on("mousemove", (event) => {
+          const [mx] = d3.pointer(event);
+          const hour = Math.round(x.invert(mx));
+          const clampedHour = Math.max(0, Math.min(23, hour));
+
+          // find point for this hour
+          const pt = aggregated.find(d => d.time_bin === clampedHour);
+          if (!pt) return;
+
+          const cx = x(pt.time_bin);
+          const cy = y(pt.trip_count);
+
+          hoverLine
+            .attr("x1", cx)
+            .attr("x2", cx)
+            .style("opacity", 1);
+
+          hoverCircle
+            .attr("cx", cx)
+            .attr("cy", cy)
+            .style("opacity", 1);
+
+          // position tooltip (relative to page)
+          const panelRect = d3.select("#detail").node().getBoundingClientRect();
+          tooltip
+            .style("display", "block")
+            .style("left", (panelRect.left + margin.left + cx + 12) + "px")
+            .style("top", (panelRect.top + margin.top + cy - 10) + "px")
+            .html(`hour ${pt.time_bin}<br>${d3.format(",")(pt.trip_count)} trips`);
+        })
+        .on("mouseleave", () => {
+          hoverLine.style("opacity", 0);
+          hoverCircle.style("opacity", 0);
+          tooltip.style("display", "none");
+        });
+
+      // title include bolded part
+      const label = readableLabel(clusterId, semantics);
+      const parts = splitLabel(label);
+      d3.select("#detail-title").html(`<strong>${parts.strong}</strong>${parts.rest ? " – " + parts.rest : ""} – hourly profile`);
+    }
+  </script>
+</body>
+</html>

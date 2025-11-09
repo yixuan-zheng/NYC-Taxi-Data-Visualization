@@ -1,0 +1,122 @@
+{
+  "0": {
+    "cluster_id": 0,
+    "label": "Airport hub",
+    "total_intensity": 18958046,
+    "boroughs": [
+      "Queens",
+      "Brooklyn",
+      "Manhattan"
+    ],
+    "top_zones": [
+      "LaGuardia Airport",
+      "Crown Heights North",
+      "East Village"
+    ]
+  },
+  "1": {
+    "cluster_id": 1,
+    "label": "Airport hub",
+    "total_intensity": 371533,
+    "boroughs": [
+      "Queens"
+    ],
+    "top_zones": [
+      "JFK Airport"
+    ]
+  },
+  "2": {
+    "cluster_id": 2,
+    "label": "Queens residential",
+    "total_intensity": 130116,
+    "boroughs": [
+      "Queens"
+    ],
+    "top_zones": [
+      "South Ozone Park"
+    ]
+  },
+  "5": {
+    "cluster_id": 5,
+    "label": "Staten Island residential",
+    "total_intensity": 125120,
+    "boroughs": [
+      "Staten Island"
+    ],
+    "top_zones": [
+      "Saint George/New Brighton",
+      "Stapleton",
+      "South Beach/Dongan Hills"
+    ]
+  },
+  "3": {
+    "cluster_id": 3,
+    "label": "Queens residential",
+    "total_intensity": 84577,
+    "boroughs": [
+      "Queens"
+    ],
+    "top_zones": [
+      "Saint Albans"
+    ]
+  },
+  "6": {
+    "cluster_id": 6,
+    "label": "Queens residential",
+    "total_intensity": 61816,
+    "boroughs": [
+      "Queens"
+    ],
+    "top_zones": [
+      "Laurelton",
+      "Cambria Heights"
+    ]
+  },
+  "4": {
+    "cluster_id": 4,
+    "label": "Queens residential",
+    "total_intensity": 40762,
+    "boroughs": [
+      "Queens"
+    ],
+    "top_zones": [
+      "Far Rockaway"
+    ]
+  },
+  "7": {
+    "cluster_id": 7,
+    "label": "Queens residential",
+    "total_intensity": 37915,
+    "boroughs": [
+      "Queens"
+    ],
+    "top_zones": [
+      "Rosedale"
+    ]
+  },
+  "15": {
+    "cluster_id": 15,
+    "label": "Queens residential",
+    "total_intensity": 34079,
+    "boroughs": [
+      "Queens"
+    ],
+    "top_zones": [
+      "Bellerose",
+      "Glen Oaks"
+    ]
+  },
+  "19": {
+    "cluster_id": 19,
+    "label": "Staten Island residential",
+    "total_intensity": 32416,
+    "boroughs": [
+      "Staten Island"
+    ],
+    "top_zones": [
+      "Great Kills",
+      "New Dorp/Midland Beach",
+      "Oakwood"
+    ]
+  }
+}
