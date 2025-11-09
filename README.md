@@ -129,13 +129,6 @@ Then open in your browser:
 2. Make your changes (new filters, better legends, new datasets).
 3. Commit and open a PR.
 
-Ideas to improve:
-
-* Add date / month filters
-* Add OD volume histograms
-* Add tooltips showing both in- and out-flows
-* Make the color scale dynamic to the selected subset
-
 ## Notes
 
 * This is a **prototype**: structure is flat on purpose.
