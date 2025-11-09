@@ -5,6 +5,8 @@ This current repo is a very lightweight prototype of three D3-based visualizatio
 It’s intentionally simple — you are **highly encouraged** to expand it (more interactions, filters, styling, new datasets), **but please don’t push directly to `main`**. Create your own branch and open a PR.
 
 ## Repo Structure
+
+```text
 .
 ├── data
 │   ├── cluster_semantics.json
