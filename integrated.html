@@ -1,0 +1,1333 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>NYC Taxi — Hotspots + OD Flows</title>
+<style>
+  :root {
+    --page:#f8fafc;
+    --panel:#ffffff;
+    --ink:#0f172a;
+    --muted:#64748b;
+    --map-bg:#e5e7eb;
+  }
+  html,body{
+    height:100%;
+    margin:0;
+    background:var(--page);
+    color:var(--ink);
+    font:14px/1.4 system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
+  }
+  .topbar{
+    display:flex;
+    gap:10px;
+    align-items:center;
+    padding:10px 12px 0 12px;
+  }
+  .topbar label{font-weight:500}
+  .layout{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:12px;
+    height:calc(100% - 52px);
+    padding:12px;
+    box-sizing:border-box;
+  }
+  .viz{
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+    min-height:0;
+  }
+  .panel{
+    background:var(--panel);
+    border-radius:14px;
+    padding:10px 12px;
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+    box-shadow:0 10px 25px rgba(15,23,42,.05);
+  }
+  .panel-title{font-weight:600;font-size:14px}
+  .hint{font-size:12px;color:var(--muted)}
+  .map-wrap{
+    position:relative;
+    border-radius:16px;
+    overflow:hidden;
+    background:var(--map-bg);
+    box-shadow:0 16px 40px rgba(15,23,42,.05), 0 0 0 1px rgba(148,163,184,.25);
+    flex:1 1 0;
+    min-height:420px;
+  }
+  .map-wrap svg{width:100%;height:100%}
+
+  /* BASE legend styles */
+  .legend-title{
+    font-weight:600;
+    font-size:12px;
+  }
+  .legend-labels{
+    display:flex;
+    justify-content:space-between;
+    font-size:10.5px;
+    color:#475569;
+  }
+  .legend-bar{
+    height:8px;
+    border-radius:9999px;
+  }
+  .legend-bar.hot{
+    background:linear-gradient(to right, #ffffcc, #fed976, #fd8d3c, #e31a1c);
+  }
+  .legend-bar.flow{
+    background:linear-gradient(to right, #0b4f9c, #cbd5e1, #991b1b);
+  }
+
+  /* HOT legend (left) — make it smaller */
+  #hotLegend{
+    background:#f1f5f9;
+    border:1px solid rgba(148,163,184,.35);
+    border-radius:10px;
+    padding:6px 8px;
+    display:flex;
+    flex-direction:column;
+    gap:4px;
+    max-width:190px;
+  }
+  #hotLegend .legend-bar{
+    width:120px;
+  }
+  #hotLegend .legend-labels{
+    width:120px;
+  }
+
+  /* OD legend (right) — make it a bit longer & right-aligned */
+  #odLegend{
+    background:#f1f5f9;
+    border:1px solid rgba(148,163,184,.35);
+    border-radius:10px;
+    padding:6px 8px;
+    display:flex;
+    flex-direction:column;
+    gap:4px;
+    max-width:240px;
+  }
+  #odLegend .legend-bar{
+    width:180px;
+  }
+  #odLegend .legend-labels{
+    width:180px;
+  }
+
+  .od-controls{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    justify-content:space-between;
+    flex-wrap:wrap;
+  }
+
+  select,input[type=range]{font:inherit}
+  input[type="range"]{width:150px}
+  .tooltip{
+    position:absolute;pointer-events:none;background:#ffffff;color:#0f172a;padding:8px 10px;border-radius:8px;
+    font-size:12px;box-shadow:0 8px 20px rgba(15,23,42,.18);opacity:0;border:1px solid rgba(148,163,184,.25);
+  }
+  .od-node{
+    stroke:#ffffff;
+    stroke-width:1;
+    cursor:pointer;
+  }
+  .edge{
+    fill:none;
+    pointer-events:stroke;
+  }
+  /* OD / Cluster view toggle */
+  .od-toggle {
+    display:flex;
+    gap:6px;
+    margin-top:4px;
+  }
+  .od-view-btn {
+    border:1px solid rgba(148,163,184,.5);
+    background:#fff;
+    border-radius:8px;
+    padding:4px 10px;
+    font-size:12px;
+    cursor:pointer;
+  }
+  .od-view-btn.is-active {
+    background:#e2e8ff;
+    border-color:#3b82f6;
+    color:#0f172a;
+  }
+
+  /* cluster view container (replaces map area) */
+  .cluster-view {
+    background:#ffffff;
+    border-radius:16px;
+    box-shadow:0 16px 40px rgba(15,23,42,.05), 0 0 0 1px rgba(148,163,184,.25);
+    flex:1 1 0;
+    min-height:420px;
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+    position:relative;
+    padding:10px 12px 12px;
+  }
+  .cluster-title {
+    font-weight:600;
+    font-size:13.5px;
+  }
+  .cluster-subtitle {
+    font-size:12px;
+    color:#64748b;
+  }
+  .cluster-chart {
+    min-height:230px;
+  }
+  .cluster-table-wrap {
+    overflow-y:auto;
+    border:1px solid rgba(148,163,184,.2);
+    border-radius:10px;
+  }
+  .cluster-table {
+    width:100%;
+    border-collapse:collapse;
+    font-size:12.5px;
+  }
+  .cluster-table thead {
+    background:#f8fafc;
+  }
+  .cluster-table th,
+  .cluster-table td {
+    padding:6px 8px;
+  }
+  .cluster-table tbody tr {
+    cursor:pointer;
+    border-bottom:1px solid rgba(148,163,184,.12);
+  }
+  .cluster-table tbody tr:hover {
+    background:rgba(226,232,255,.4);
+  }
+  .cluster-table tbody tr.active {
+    background:rgba(59,130,246,.10);
+  }
+  .cluster-tooltip {
+    position:absolute;
+    pointer-events:none;
+    background:#fff;
+    border:1px solid rgba(148,163,184,.5);
+    border-radius:6px;
+    padding:4px 8px;
+    font-size:11px;
+    box-shadow:0 4px 16px rgba(15,23,42,.15);
+    display:none;
+    z-index:10;
+  }
+
+</style>
+<body>
+  <!-- shared hour -->
+  <div class="topbar">
+    <label for="hour">Hour</label>
+    <input id="hour" type="range" min="0" max="23" value="8" step="1" />
+    <span id="hourLabel">08:00</span>
+    <span class="hint">Hour drives both the hotspot map and the OD map.</span>
+  </div>
+
+  <div class="layout">
+    <!-- LEFT: HOTSPOT MAP (spatiotemporal) -->
+    <div class="viz" id="hotViz">
+      <div class="panel">
+        <div class="panel-title">NYC Taxi Hotspots — Spatiotemporal</div>
+        <div class="hint">Fill = trips at the selected hour. Black stroke = zone; red stroke = noise. Hover to inspect.</div>
+        <div id="hotStats" class="hint"></div>
+        <div class="legend-box" id="hotLegend">
+          <div class="legend-title">Trips/hr</div>
+          <div class="legend-bar hot"></div>
+          <div class="legend-labels">
+            <span id="legendStart">0</span>
+            <span id="legendMid">—</span>
+            <span id="legendEnd">—</span>
+          </div>
+          <div class="hint" id="legendNote">Scaled to selected dataset.</div>
+        </div>
+      </div>
+      <div class="map-wrap" id="hotMap">
+        <svg id="hotSvg"></svg>
+        <div class="tooltip" id="hotTip"></div>
+      </div>
+    </div>
+
+    <!-- RIGHT: OD MAP -->
+    <div class="viz" id="odViz">
+      <div class="panel">
+        <div class="panel-title">OD — NYC Taxi Trips</div>
+        <div class="hint">1) Click a zone → show all its flows. 2) Click a second zone or a route → focus on that pair. 3) Click empty map → reset.</div>
+        <div class="od-toggle">
+          <button class="od-view-btn is-active" data-view="od">OD flows</button>
+          <button class="od-view-btn" data-view="cluster">Cluster time patterns</button>
+        </div>
+        <div class="od-controls">
+          <div style="display:flex;flex-direction:column;gap:4px;min-width:150px;">
+            <label for="boroughFilter" style="font-size:12px;">Show zones in borough</label>
+            <select id="boroughFilter" style="max-width:160px">
+              <option value="__all__">All boroughs</option>
+              <option>Manhattan</option>
+              <option>Brooklyn</option>
+              <option>Queens</option>
+              <option>The Bronx</option>
+              <option>Staten Island</option>
+            </select>
+          </div>
+          <div class="legend-box" id="odLegend">
+            <div class="legend-title">Flow intensity</div>
+            <div class="legend-bar flow"></div>
+            <div class="legend-labels"><span>low</span><span>mid</span><span>high</span></div>
+            <div class="hint" id="odLegendNote">Scaled to selected zone & hour.</div>
+          </div>
+        </div>
+        <div class="hint" id="odSummary">No zone selected. Click a dot.</div>
+        <div class="hint" id="odDbg"></div>
+      </div>
+            <!-- view toggle target area -->
+      <div class="map-wrap" id="odMap">
+        <svg id="odSvg"></svg>
+        <div id="odTip" class="tooltip"></div>
+      </div>
+
+      <!-- second view: cluster time patterns (hidden by default) -->
+      <div class="cluster-view" id="clusterView" style="display:none;">
+        <div>
+          <div class="cluster-title" id="clusterDetailTitle">Cluster – hourly profile</div>
+          <div class="cluster-subtitle">X: hour 0–23 • Y: trip count</div>
+        </div>
+        <div id="clusterDetail" class="cluster-chart"></div>
+        <div class="cluster-table-wrap">
+          <table class="cluster-table" id="clusterTable">
+            <thead>
+              <tr>
+                <th style="width:38px;">#</th>
+                <th>Cluster / area</th>
+                <th style="text-align:right;">Total trips</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+        <div id="clusterTooltip" class="cluster-tooltip"></div>
+      </div>
+    </div>
+  </div>
+
+<script src="https://d3js.org/d3.v7.min.js"></script>
+<script>
+(async function(){
+  const hourEl = document.getElementById("hour");
+  const hourLabel = document.getElementById("hourLabel");
+
+  // DOM refs
+  const hotSvg = d3.select("#hotSvg");
+  const odSvg = d3.select("#odSvg");
+  const hotTip = d3.select("#hotTip");
+  const odTip = d3.select("#odTip");
+  const hotStats = d3.select("#hotStats");
+  const legendNote = d3.select("#legendNote");
+  const odSummary = d3.select("#odSummary");
+  const odDbg = d3.select("#odDbg");
+  const odLegendNote = d3.select("#odLegendNote");
+  const boroFilterEl = document.getElementById("boroughFilter");
+
+  const hotMapEl = document.getElementById("hotMap");
+  const odMapEl = document.getElementById("odMap");
+  const hotWidth = hotMapEl.clientWidth, hotHeight = hotMapEl.clientHeight || 420;
+  const odWidth = odMapEl.clientWidth, odHeight = odMapEl.clientHeight || 420;
+
+  // svg viewboxes
+  hotSvg.attr("viewBox", [0,0,hotWidth,hotHeight]).style("background","transparent");
+  odSvg.attr("viewBox", [0,0,odWidth,odHeight]).style("background","transparent");
+
+  // zoom roots
+  const hotRoot = hotSvg.append("g").attr("class","root");
+  const hotZonesG = hotRoot.append("g");
+  const odRoot = odSvg.append("g").attr("class","root");
+  const odZonesG = odRoot.append("g");
+  const odEdgesG = odRoot.append("g");
+  const odNodesG = odRoot.append("g");
+
+  const hotZoom = d3.zoom()
+    .scaleExtent([1,6])
+    .on("zoom", e => {
+      hotRoot.attr("transform", e.transform);
+    });
+  hotSvg.call(hotZoom);
+  // OD zoom will be attached after nodes are created (so we can scale their radius)
+
+  // click empty space on left panel to exit lock-in
+  hotSvg.on("click", () => {
+    clearSelectionAndReset();
+  });
+
+  // load all data
+  const [zones, flows, lookup, st, tsData, semantics] = await Promise.all([
+    d3.json("data/taxi_zones.geojson"),
+    d3.csv("data/flows.csv", d3.autoType),
+    d3.csv("data/taxi_zone_lookup.csv").catch(()=>[]),
+    d3.csv("data/clusters_spatiotemporal.csv", d3.autoType),
+    d3.csv("timeseries.csv", d3.autoType).catch(() => []),
+    d3.json("cluster_semantics.json").catch(() => ({}))
+  ]);
+
+  function normalizeBorough(b){
+    if(!b) return "Unknown";
+    const s = String(b).trim().toLowerCase();
+    if (s.includes("manhattan")) return "Manhattan";
+    if (s.includes("brooklyn"))  return "Brooklyn";
+    if (s.includes("queens"))    return "Queens";
+    if (s.includes("bronx"))     return "The Bronx";
+    if (s.includes("staten"))    return "Staten Island";
+    return b;
+  }
+  function fmtHour(h){ return h.toString().padStart(2,"0")+":00"; }
+
+  // OD borough colors
+  const BOROUGH_HIGHLIGHT = {
+    "Manhattan": "rgba(120, 81, 169, 0.30)",
+    "Brooklyn": "rgba(120, 81, 169, 0.30)",
+    "Queens": "rgba(120, 81, 169, 0.30)",
+    "The Bronx": "rgba(120, 81, 169, 0.30)",
+    "Staten Island": "rgba(120, 81, 169, 0.30)",
+    "Unknown": "rgba(120, 81, 169, 0.20)"
+  };
+
+  // lookups
+  const csvLookup = new Map();
+  lookup.forEach(r => {
+    csvLookup.set(+r.LocationID, {
+      zone: r.Zone,
+      borough: normalizeBorough(r.Borough)
+    });
+  });
+
+  // projections
+  const hotProj = d3.geoMercator().fitSize([hotWidth, hotHeight], zones);
+  const hotPath = d3.geoPath(hotProj);
+  const odProj = d3.geoMercator().fitSize([odWidth, odHeight], zones);
+  const odPath = d3.geoPath(odProj);
+
+  // master zone map
+  const idTo = new Map();
+  zones.features.forEach(f => {
+    const id = +f.properties.LocationID;
+    const lk = csvLookup.get(id);
+    idTo.set(id, {
+      id,
+      zone: lk ? lk.zone : (f.properties.Zone || ("Zone "+id)),
+      borough: lk ? lk.borough : normalizeBorough(f.properties.Borough),
+      feature: f
+    });
+  });
+
+  function getZoneBoroughById(id) {
+    const info = idTo.get(id);
+    return info ? info.borough : "Unknown";
+  }
+
+  // hotspot base map
+  const hotZonePaths = hotZonesG.selectAll("path.hot-zone")
+    .data(zones.features)
+    .join("path")
+    .attr("class","hot-zone")
+    .attr("d", hotPath)
+    .attr("stroke", "#000")
+    .attr("stroke-width", 0.6);
+
+  // OD base map
+  const odZonePaths = odZonesG.selectAll("path.od-zone")
+    .data(zones.features)
+    .join("path")
+    .attr("class","od-zone")
+    .attr("d", odPath)
+    .attr("fill", "#ffffff")
+    .attr("stroke", "rgba(152,163,179,.7)")
+    .attr("stroke-width", .7);
+
+  // OD centroids
+  const odZonePoints = zones.features.map(f => {
+    const id = +f.properties.LocationID;
+    const c = odPath.centroid(f);
+    const lk = idTo.get(id);
+    return {
+      id,
+      x: c[0],
+      y: c[1],
+      zone: lk.zone,
+      borough: lk.borough
+    };
+  });
+
+  // flows cleanup
+  flows.forEach(d => {
+    d.origin_zone = +d.origin_zone;
+    d.destination_zone = +d.destination_zone;
+    d.time_bin = +d.time_bin;
+    d.trip_count = +d.trip_count;
+  });
+
+  // spatiotemporal lookup
+  const stKey = (loc, h) => `${loc}|${h}`;
+  const stByKey = new Map(st.map(d => [stKey(d.LocationID, d.hour), d]));
+
+  // hotspot color (unchanged)
+  const maxIntensityHour = d3.max(st, d => d.intensity_hour) || 1;
+  const hotColor = d3.scaleQuantize()
+    .domain([0, maxIntensityHour])
+    .range(d3.schemeYlOrRd[7].slice(1));
+
+  // legend labels
+  const startVal = 0;
+  const midVal = Math.round(maxIntensityHour / 2 / 1000) * 1000;
+  const endVal = Math.round(maxIntensityHour / 1000) * 1000;
+  document.getElementById("legendStart").textContent = startVal.toLocaleString();
+  document.getElementById("legendMid").textContent = midVal.toLocaleString();
+  document.getElementById("legendEnd").textContent = endVal.toLocaleString();
+  legendNote.text(`0 → ${endVal.toLocaleString()} trips/hour`);
+
+  // precompute connectivity caps for OD
+  const connMap = new Map();
+  flows.forEach(row => {
+    const o = row.origin_zone;
+    const d = row.destination_zone;
+    if (!connMap.has(o)) connMap.set(o, new Set());
+    if (!connMap.has(d)) connMap.set(d, new Set());
+    connMap.get(o).add(d);
+    connMap.get(d).add(o);
+  });
+  const connectivityArray = Array.from(idTo.keys()).map(id => {
+    const set = connMap.get(id);
+    return { id, degree: set ? set.size : 0 };
+  }).sort((a,b) => d3.descending(a.degree, b.degree));
+  const nZones = connectivityArray.length;
+  const top5 = Math.ceil(nZones * 0.05);
+  const top10 = Math.ceil(nZones * 0.10);
+  const top20 = Math.ceil(nZones * 0.20);
+  const top40 = Math.ceil(nZones * 0.40);
+  const zoneCapMap = new Map();
+  connectivityArray.forEach((entry, idx) => {
+    // default cap for the lower-degree zones
+    let cap = 20;
+    if (idx < top5)      cap = 50;
+    else if (idx < top10) cap = 40;
+    else if (idx < top20) cap = 30;
+    else if (idx < top40) cap = 20;
+    zoneCapMap.set(entry.id, cap);
+  });
+
+  // OD state
+  let selectedPrimary = null;
+  let selectedSecondary = null;
+  let currentHoverId = null;
+
+  function zoomToBorough(b) {
+    // reset to full city view
+    if (!b || b === "__all__") {
+      hotSvg.transition().duration(500).call(hotZoom.transform, d3.zoomIdentity);
+      odSvg.transition().duration(500).call(odZoom.transform, d3.zoomIdentity);
+      return;
+    }
+
+    const features = zones.features.filter(f =>
+      getZoneBoroughById(+f.properties.LocationID) === b
+    );
+    if (!features.length) return;
+
+    // ----- LEFT PANEL (hotspot map) -----
+    let x0 = Infinity, y0 = Infinity, x1 = -Infinity, y1 = -Infinity;
+    features.forEach(f => {
+      const bnd = hotPath.bounds(f);
+      if (!bnd) return;
+      if (bnd[0][0] < x0) x0 = bnd[0][0];
+      if (bnd[0][1] < y0) y0 = bnd[0][1];
+      if (bnd[1][0] > x1) x1 = bnd[1][0];
+      if (bnd[1][1] > y1) y1 = bnd[1][1];
+    });
+    if (!isFinite(x0)) return;
+
+    const dx = x1 - x0;
+    const dy = y1 - y0;
+    const cx = (x0 + x1) / 2;
+    const cy = (y0 + y1) / 2;
+    const scaleHot = Math.max(
+      1,
+      Math.min(
+        6,
+        0.9 / Math.max(dx / hotWidth, dy / hotHeight)
+      )
+    );
+    const txHot = hotWidth / 2 - scaleHot * cx;
+    const tyHot = hotHeight / 2 - scaleHot * cy;
+    const tHot = d3.zoomIdentity.translate(txHot, tyHot).scale(scaleHot);
+    hotSvg.transition().duration(600).call(hotZoom.transform, tHot);
+
+    // ----- RIGHT PANEL (OD map) -----
+    let ox0 = Infinity, oy0 = Infinity, ox1 = -Infinity, oy1 = -Infinity;
+    features.forEach(f => {
+      const bnd = odPath.bounds(f);
+      if (!bnd) return;
+      if (bnd[0][0] < ox0) ox0 = bnd[0][0];
+      if (bnd[0][1] < oy0) oy0 = bnd[0][1];
+      if (bnd[1][0] > ox1) ox1 = bnd[1][0];
+      if (bnd[1][1] > oy1) oy1 = bnd[1][1];
+    });
+    if (!isFinite(ox0)) return;
+
+    const odDx = ox1 - ox0;
+    const odDy = oy1 - oy0;
+    const odCx = (ox0 + ox1) / 2;
+    const odCy = (oy0 + oy1) / 2;
+    const scaleOd = Math.max(
+      1,
+      Math.min(
+        6,
+        0.9 / Math.max(odDx / odWidth, odDy / odHeight)
+      )
+    );
+    const txOd = odWidth / 2 - scaleOd * odCx;
+    const tyOd = odHeight / 2 - scaleOd * odCy;
+    const tOd = d3.zoomIdentity.translate(txOd, tyOd).scale(scaleOd);
+    odSvg.transition().duration(600).call(odZoom.transform, tOd);
+  }
+
+  function clearSelectionAndReset(){
+    selectedPrimary = null;
+    selectedSecondary = null;
+
+    // remove all OD edges
+    odEdgesG.selectAll("*").remove();
+
+    // reset OD nodes
+    odNodesSel
+      .classed("selected", false)
+      .attr("opacity", 1)
+      .attr("pointer-events", "auto");
+
+    // reset summary/debug/legend
+    odSummary.text("No zone selected. Click a dot.");
+    odDbg.text("");
+    odLegendNote.text("Scaled to selected zone & hour.");
+
+    // reapply filtering & zoom to current borough selection
+    applyBoroughFilter();
+    const b = boroFilterEl.value;
+    zoomToBorough(b);
+  }
+
+  // OD nodes (color will be set from hotspot per hour)
+  const odNodesSel = odNodesG.selectAll("circle.od-node")
+    .data(odZonePoints)
+    .join("circle")
+    .attr("class","od-node")
+    .attr("r", 4)
+    .attr("cx", d => d.x)
+    .attr("cy", d => d.y)
+    .on("mouseenter", (event,d) => {
+      highlightBoth(d.id);
+      odTip.style("opacity",1)
+        .style("left",(event.offsetX+10)+"px")
+        .style("top",(event.offsetY+10)+"px")
+        .html(`<b>${d.zone} - ${d.borough}</b>`);
+    })
+    .on("mouseleave", () => {
+      odTip.style("opacity",0);
+      currentHoverId = null;
+      restoreViews();
+    })
+    .on("click", (event,d) => {
+      event.stopPropagation();
+      if (selectedPrimary === null) {
+        selectedPrimary = d.id;
+        selectedSecondary = null;
+        renderODForPrimary();
+        return;
+      }
+      if (selectedPrimary !== null && selectedSecondary === null) {
+        selectedSecondary = d.id;
+        renderODForPrimary();
+        return;
+      }
+      selectedPrimary = d.id;
+      selectedSecondary = null;
+      renderODForPrimary();
+    });
+
+  const odZoom = d3.zoom()
+    .scaleExtent([1,6])
+    .on("zoom", (e) => {
+      odRoot.attr("transform", e.transform);
+      const k = e.transform.k;
+
+      // radius + stroke shrink together so the white ring stays proportional
+      const r = 4 / Math.sqrt(k);
+      const sw = 1 / Math.sqrt(k);
+
+      odNodesSel
+        .attr("r", r)
+        // override CSS stroke-width via style so the halo actually scales
+        .style("stroke-width", sw);
+    });
+  odSvg.call(odZoom);
+
+  function getZoneBoroughById(id) {
+    return idTo.get(id)?.borough || "Unknown";
+  }
+
+  function applyBoroughFilter() {
+    const b = boroFilterEl.value;
+
+    // ----- OD polygons (right panel) -----
+    odZonePaths
+      .attr("fill", d => {
+        const id = +d.properties.LocationID;
+        const bd = getZoneBoroughById(id);
+        if (b === "__all__") return "#ffffff";
+        return (bd === b)
+          ? (BOROUGH_HIGHLIGHT[bd] || BOROUGH_HIGHLIGHT["Unknown"])
+          : "#ffffff";
+      })
+      .attr("stroke", d => {
+        const id = +d.properties.LocationID;
+        const bd = getZoneBoroughById(id);
+        if (b === "__all__") {
+          // neutral border in "All boroughs"
+          return "rgba(152,163,179,.7)";
+        }
+        // highlight selected borough with a slightly darker blue border
+        return (bd === b) ? "#1d4ed8" : "rgba(152,163,184,.4)";
+      })
+      .attr("stroke-width", d => {
+        const id = +d.properties.LocationID;
+        const bd = getZoneBoroughById(id);
+        if (b === "__all__") return 0.7;
+        return (bd === b) ? 1.1 : 0.5;
+      });
+
+    // ----- OD nodes (right panel) -----
+    // Only change OD node opacity when *not* in lock-in view
+    if (selectedPrimary === null) {
+      odNodesSel
+        .attr("opacity", d => (b === "__all__" || d.borough === b) ? 1 : 0.2)
+        .attr("pointer-events", d => (b === "__all__" || d.borough === b) ? "auto" : "none");
+    }
+
+    // ----- HOTSPOT polygons (left panel) -----
+    hotZonePaths
+      .attr("fill-opacity", d => {
+        const id = +d.properties.LocationID;
+        const bd = getZoneBoroughById(id);
+        const inFilter = (b === "__all__" || bd === b);
+
+        if (selectedPrimary !== null) {
+          // Selection: only that zone bright; others dim
+          return id === selectedPrimary ? 1 : 0.15;
+        }
+
+        if (b === "__all__") {
+          // All-borough mode, no selection: keep everything bright
+          return 0.95;
+        }
+
+        // Borough filter active, no selection:
+        // in-borough bright, out-of-borough dim
+        return inFilter ? 0.95 : 0.15;
+      })
+      .attr("stroke-width", d => {
+        const id = +d.properties.LocationID;
+        if (selectedPrimary !== null && id === selectedPrimary) {
+          return 1.4;
+        }
+        return 0.7;
+      })
+      .attr("stroke", d => {
+        const id = +d.properties.LocationID;
+        const bd = getZoneBoroughById(id);
+        const inFilter = (b === "__all__" || bd === b);
+
+        if (selectedPrimary !== null) {
+          // In lock-in mode:
+          // selected zone: strong blue
+          if (id === selectedPrimary) return "#1d4ed8";
+          // other zones in the same borough: lighter blue border so they're easy to see
+          if (b !== "__all__" && inFilter) return "#1d4ed8";
+          // other boroughs: muted border
+          return "rgba(148,163,184,.6)";
+        }
+
+        // No selection:
+        if (b === "__all__") {
+          return "#000";
+        }
+
+        // Borough filter on, no selection:
+        if (!inFilter) return "rgba(148,163,184,.6)";
+        return "#1d4ed8";
+      })
+      .attr("pointer-events", d => {
+        const id = +d.properties.LocationID;
+        const bd = getZoneBoroughById(id);
+        // out-of-borough zones are never clickable when a filter is on
+        if (b !== "__all__" && bd !== b) return "none";
+        return "auto";
+      });
+  }
+
+  odSvg.on("click", () => {
+    clearSelectionAndReset();
+  });
+
+  // borough filter — also exits lock-in view and auto-zooms
+  boroFilterEl.addEventListener("change", () => {
+    clearSelectionAndReset();
+  });
+
+  // hotspot repaint
+  function repaintHot(){
+    const hour = +hourEl.value;
+
+    hotZonePaths
+      .attr("fill", d => {
+        const id = +d.properties.LocationID;
+        const row = stByKey.get(`${id}|${hour}`);
+        const val = row ? +row.intensity_hour : 0;
+        return hotColor(val);
+      })
+      .attr("fill-opacity", 0.95) // base: bright everywhere; filtering/selection will adjust
+      .attr("stroke", d => {
+        const id = +d.properties.LocationID;
+        const row = stByKey.get(`${id}|${hour}`);
+        // keep noise zones red, others black
+        return row && +row.cluster_id === -1 ? "#dc2626" : "#000";
+      })
+      .on("mousemove", (event, d) => {
+        const hour = +hourEl.value;
+        const id = +d.properties.LocationID;
+        const row = stByKey.get(`${id}|${hour}`);
+        const meta = idTo.get(id);
+        const zoneName = d.properties.Zone || meta?.zone || "Unknown zone";
+        const borough = d.properties.Borough || meta?.borough || "";
+
+        highlightBoth(id);
+
+        let html = "";
+
+        if (selectedPrimary !== null && id !== selectedPrimary) {
+          // lock-in view but hovering a non-selected zone:
+          // only show basic info to keep things clean
+          html = `<div><b>${zoneName}</b>${borough ? " — " + borough : ""}</div>`;
+        } else {
+          // no selection OR hovering selected zone: show full details
+          html = `<div><b>${zoneName}</b>${borough ? " — " + borough : ""}</div>`;
+          html += `<div>Hour: ${fmtHour(hour)}</div>`;
+          html += `<div>Trips (this hour): ${row ? (+row.intensity_hour).toLocaleString() : 0}</div>`;
+          html += `<div>Avg fare (this hour): ${row && isFinite(+row.avg_fare_hour) ? "$"+(+row.avg_fare_hour).toFixed(2) : "—"}</div>`;
+          html += `<div>Avg duration (this hour): ${row && isFinite(+row.avg_duration_min_hour) ? (+row.avg_duration_min_hour).toFixed(1)+" min" : "—"}</div>`;
+        }
+
+        hotTip.style("opacity",1)
+          .style("left",(event.offsetX+12)+"px")
+          .style("top",(event.offsetY+12)+"px")
+          .html(html);
+      })
+      .on("mouseleave", () => {
+        hotTip.style("opacity",0);
+        currentHoverId = null;
+        restoreViews();
+      })
+      .on("click", (event, d) => {
+        event.stopPropagation();
+        const id = +d.properties.LocationID;
+
+        // respect borough filter using unified borough lookup
+        const b = boroFilterEl.value;
+        const bd = getZoneBoroughById(id);
+        const inFilter = (b === "__all__" || bd === b);
+        if (!inFilter) return;
+
+        selectedPrimary = id;
+        selectedSecondary = null;
+        renderODForPrimary();
+        // after selecting, we want the left map to dim all others:
+        applyBoroughFilter();
+      });
+
+    hotStats.text(`Spatiotemporal • Hour: ${fmtHour(hour)} • Max intensity: ${maxIntensityHour.toLocaleString()} trips/hour`);
+  }
+
+  function adjustOdZoomToFlows(primaryId, shownPairs){
+    if (!shownPairs || !shownPairs.length) return;
+
+    const ids = new Set([primaryId, ...shownPairs.map(p => p.otherId)]);
+
+    let x0 = Infinity, y0 = Infinity, x1 = -Infinity, y1 = -Infinity;
+    odZonePoints.forEach(pt => {
+      if (!ids.has(pt.id)) return;
+      const x = pt.x, y = pt.y;
+      if (x < x0) x0 = x;
+      if (y < y0) y0 = y;
+      if (x > x1) x1 = x;
+      if (y > y1) y1 = y;
+    });
+    if (!isFinite(x0) || !isFinite(y0) || !isFinite(x1) || !isFinite(y1)) return;
+
+    const pad = 40;
+    x0 -= pad; y0 -= pad; x1 += pad; y1 += pad;
+
+    const dx = x1 - x0;
+    const dy = y1 - y0;
+    const cx = (x0 + x1) / 2;
+    const cy = (y0 + y1) / 2;
+
+    const scale = Math.max(
+      1,
+      Math.min(
+        6,
+        0.9 / Math.max(dx / odWidth, dy / odHeight)
+      )
+    );
+
+    const tx = odWidth / 2 - scale * cx;
+    const ty = odHeight / 2 - scale * cy;
+
+    const t = d3.zoomIdentity.translate(tx, ty).scale(scale);
+    odSvg.transition().duration(600).call(odZoom.transform, t);
+  }
+
+  // OD renderer
+  function renderODForPrimary(){
+    const hour = +hourEl.value;
+    const primaryId = selectedPrimary;
+    const primary = idTo.get(primaryId);
+    if (!primary) return;
+
+    const relevant = flows.filter(d =>
+      d.time_bin === hour &&
+      (d.origin_zone === primaryId || d.destination_zone === primaryId)
+    );
+
+    const byOther = new Map();
+    for (const row of relevant) {
+      const isOut = row.origin_zone === primaryId;
+      const otherId = isOut ? row.destination_zone : row.origin_zone;
+      if (!byOther.has(otherId)) {
+        byOther.set(otherId, { otherId, outCount:0, inCount:0 });
+      }
+      const ent = byOther.get(otherId);
+      if (isOut) ent.outCount += row.trip_count;
+      else ent.inCount += row.trip_count;
+    }
+
+    const pairsAll = Array.from(byOther.values());
+    pairsAll.forEach(p => p.total = p.outCount + p.inCount);
+    const maxTotalAll = d3.max(pairsAll, d => d.total) || 1;
+
+    let pairs = pairsAll;
+    if (selectedSecondary !== null) {
+      pairs = pairsAll.filter(p => p.otherId === selectedSecondary);
+    }
+    pairs.sort((a,b) => d3.ascending(a.total, b.total));
+
+    const capForPrimary = zoneCapMap.get(primaryId) ?? 20;
+    let shownPairs = pairs;
+    let showingMsg = "";
+    if (selectedSecondary === null && Number.isFinite(capForPrimary)) {
+      if (pairs.length > capForPrimary) {
+        shownPairs = pairs.slice(pairs.length - capForPrimary);
+        showingMsg = ` Showing ${shownPairs.length} of ${pairs.length} for readability.`;
+      }
+    }
+
+    const flowColor = d3.scaleLinear()
+      .domain([0, maxTotalAll * 0.5, maxTotalAll])
+      .range(["#0b4f9c", "#cbd5e1", "#991b1b"]);
+    const widthScale = d3.scaleSqrt()
+      .domain([0, maxTotalAll])
+      .range([1, 5.5]);
+
+    odEdgesG.selectAll("*").remove();
+
+    const connectedIds = new Set([primaryId, ...shownPairs.map(p => p.otherId)]);
+    odNodesSel
+      .attr("opacity", d => connectedIds.has(d.id) ? 1 : 0.08)
+      .attr("pointer-events", d => connectedIds.has(d.id) ? "auto" : "none")
+      .classed("selected", d => d.id === primaryId || d.id === selectedSecondary);
+
+    const routeGroups = odEdgesG.selectAll("g.route")
+      .data(shownPairs, d => d.otherId)
+      .enter()
+      .append("g")
+      .attr("class","route");
+
+    routeGroups.each(function(d){
+      const g = d3.select(this);
+      const c1 = odZonePoints.find(z => z.id === primaryId);
+      const c2 = odZonePoints.find(z => z.id === d.otherId);
+      if (!c1 || !c2) return;
+      const strokeCol = flowColor(d.total);
+      const sw = widthScale(d.total);
+      const thePath = (function(p1,p2){
+        const mx=(p1[0]+p2[0])/2;
+        const my=(p1[1]+p2[1])/2 - 14;
+        const p=d3.path();
+        p.moveTo(p1[0],p1[1]);
+        p.quadraticCurveTo(mx,my,p2[0],p2[1]);
+        return p.toString();
+      })([c1.x, c1.y],[c2.x, c2.y]);
+
+      g.append("path")
+        .attr("class","edge")
+        .attr("stroke", strokeCol)
+        .attr("stroke-width", sw)
+        .attr("stroke-linecap","round")
+        .attr("stroke-opacity", 0.98)
+        .attr("d", thePath);
+
+      g.append("path")
+        .attr("class","edge-hit")
+        .attr("d", thePath)
+        .attr("fill","none")
+        .attr("stroke","transparent")
+        .attr("stroke-width", Math.max(sw+8, 12))
+        .on("mousemove", (event) => {
+          const baseA = `${primary.zone} - ${primary.borough}`;
+          const other = idTo.get(d.otherId);
+          const baseB = `${other.zone} - ${other.borough}`;
+          let html = `<b>${baseA} ⇄ ${baseB}</b><br>total trips: ${d.total.toLocaleString()}`;
+          if (d.outCount > 0) html += `<br>${baseA} → ${baseB}: ${d.outCount.toLocaleString()}`;
+          if (d.inCount > 0) html += `<br>${baseB} → ${baseA}: ${d.inCount.toLocaleString()}`;
+          odTip.style("opacity",1)
+            .style("left",(event.offsetX+12)+"px")
+            .style("top",(event.offsetY+12)+"px")
+            .html(html);
+        })
+        .on("mouseleave", () => {
+          odTip.style("opacity",0);
+        })
+        .on("click", (event) => {
+          event.stopPropagation();
+          selectedSecondary = d.otherId;
+          renderODForPrimary();
+        });
+    });
+
+    odSummary.html(() => {
+      const base = `<b>${primary.zone} - ${primary.borough}</b> at ${fmtHour(hour)} — ${pairsAll.length} connected zones.`;
+      return showingMsg ? (base + showingMsg) : base;
+    });
+    odDbg.text(`Max flow for this zone @ hour: ${maxTotalAll.toLocaleString()}`);
+    odLegendNote.text(`Scaled 0 → ${maxTotalAll.toLocaleString()} trips for this zone & hour.`);
+
+    // update left/right maps to respect borough + selection
+    applyBoroughFilter();
+
+    // auto zoom OD map to keep flows in view
+    adjustOdZoomToFlows(primaryId, shownPairs);
+  }
+
+  // paint OD dots with hotspot colors
+  function paintOdNodesFromHot(){
+    const hour = +hourEl.value;
+    odNodesSel
+      .attr("fill", d => {
+        const row = stByKey.get(`${d.id}|${hour}`);
+        const val = row ? +row.intensity_hour : 0;
+        return hotColor(val);
+      })
+      .attr("fill-opacity", 0.9); // lets flows show through just a bit more
+  }
+
+  // cross-highlighting — hover links left + right, while respecting selection
+  function highlightBoth(zoneId){
+    currentHoverId = zoneId;
+    const b = boroFilterEl.value;
+
+    // If a primary zone is selected, selection wins:
+    // keep only that zone bright; hovering should not override that layout.
+    if (selectedPrimary !== null) {
+      hotZonePaths
+        .attr("fill-opacity", d => {
+          const id = +d.properties.LocationID;
+          return id === selectedPrimary ? 1 : 0.15;
+        })
+        .attr("stroke-width", d => {
+          const id = +d.properties.LocationID;
+          return id === selectedPrimary ? 1.4 : 0.6;
+        });
+      // OD nodes are controlled by renderODForPrimary in lock-in view.
+      return;
+    }
+
+    // No selection: hover-based cross-highlighting.
+    hotZonePaths
+      .attr("fill-opacity", d => {
+        const id = +d.properties.LocationID;
+        const bd = getZoneBoroughById(id);
+        const inFilter = (b === "__all__" || bd === b);
+
+        // out-of-borough zones stay dim when a filter is active
+        if (!inFilter && b !== "__all__") return 0.15;
+
+        if (b === "__all__") {
+          // no borough filter: hovered bright, others dim
+          return id === zoneId ? 1 : 0.2;
+        } else {
+          // borough selected:
+          // hovered in-borough: bright
+          // other in-borough: dim but still more visible
+          // out-of-borough handled above
+          if (!inFilter) return 0.15;
+          return id === zoneId ? 1 : 0.35;
+        }
+      })
+      .attr("stroke-width", d => {
+        const id = +d.properties.LocationID;
+        return id === zoneId ? 1.5 : 0.7;
+      })
+      .attr("stroke", d => {
+        const id = +d.properties.LocationID;
+        const bd = getZoneBoroughById(id);
+        const inFilter = (b === "__all__" || bd === b);
+
+        if (b === "__all__") {
+          // global mode: hovered gets blue border, others black
+          return id === zoneId ? "#1d4ed8" : "#000";
+        } else {
+          // borough mode:
+          // in-borough zones (hovered or not) get blue borders, out-of-borough grey
+          if (!inFilter) return "rgba(148,163,184,.6)";
+          return "#1d4ed8";
+        }
+      });
+
+    odNodesSel
+      .attr("opacity", d => {
+        const inFilter = (b === "__all__" || d.borough === b);
+        if (!inFilter) return 0.2;          // dim out-of-borough nodes
+        return d.id === zoneId ? 1 : 0.15;  // highlight hovered zone's dot, dim others
+      });
+  }
+
+  function restoreViews(){
+    // repaint the base hotspot colors for the current hour
+    repaintHot();
+
+    // if a primary zone is selected, redraw OD flows
+    if (selectedPrimary !== null) {
+      renderODForPrimary();
+    }
+
+    // always reapply borough filter + selection shading on both maps
+    applyBoroughFilter();
+  }
+
+  // shared hour change
+  hourEl.addEventListener("input", () => {
+    const h = +hourEl.value;
+    hourLabel.textContent = fmtHour(h);
+
+    // repaint both layers for the new hour
+    repaintHot();
+    paintOdNodesFromHot();
+
+    if (selectedPrimary !== null) {
+      renderODForPrimary();
+    }
+
+    // reapply borough filter + selection shading
+    applyBoroughFilter();
+  });
+
+  // ------ cluster time-series view setup ------
+  // we'll build a small derived structure if data exists
+  let clusterById = new Map();
+  let clusterTopList = [];
+
+  function buildClusterStructures() {
+    if (!tsData || !tsData.length) return;
+    // normalize
+    tsData.forEach(d => {
+      d.cluster_id = +d.cluster_id;
+      d.time_bin = +d.time_bin;
+      d.trip_count = +d.trip_count;
+    });
+    // group by cluster
+    clusterById = d3.group(tsData, d => d.cluster_id);
+    // totals
+    const totals = Array.from(clusterById, ([cluster_id, rows]) => ({
+      cluster_id,
+      total_trip: d3.sum(rows, r => r.trip_count)
+    })).sort((a,b) => d3.descending(a.total_trip, b.total_trip));
+    clusterTopList = totals.slice(0, 10);
+  }
+
+  function readableClusterLabel(clusterId) {
+    const info = semantics[clusterId];
+    if (!info) return `Cluster ${clusterId}`;
+    const zones = Array.isArray(info.top_zones) ? info.top_zones.filter(Boolean) : [];
+    const extra = zones.length ? " – " + zones.slice(0,2).join(", ") : "";
+    return `${info.label}${extra}`;
+  }
+
+  function renderClusterTable() {
+    const tbody = d3.select("#clusterTable tbody");
+    tbody.selectAll("tr").remove();
+    const rows = tbody.selectAll("tr")
+      .data(clusterTopList)
+      .enter()
+      .append("tr")
+      .attr("data-cluster", d => d.cluster_id)
+      .on("click", (event, d) => {
+        renderClusterDetail(d.cluster_id);
+        highlightClusterRow(d.cluster_id);
+      });
+
+    rows.append("td").text((d,i) => i+1);
+    rows.append("td").text(d => readableClusterLabel(d.cluster_id));
+    rows.append("td")
+      .style("text-align","right")
+      .text(d => d3.format(",")(d.total_trip));
+  }
+
+  function highlightClusterRow(clusterId) {
+    d3.selectAll("#clusterTable tbody tr").classed("active", false);
+    d3.select(`#clusterTable tbody tr[data-cluster='${clusterId}']`).classed("active", true);
+  }
+
+  function renderClusterDetail(clusterId) {
+    const rows = clusterById.get(clusterId) || [];
+    const grouped = d3.rollups(
+      rows,
+      v => d3.sum(v, d => d.trip_count),
+      d => d.time_bin
+    ).map(([time_bin, trip_count]) => ({ time_bin:+time_bin, trip_count:+trip_count }))
+     .sort((a,b) => d3.ascending(a.time_bin, b.time_bin));
+
+    const box = d3.select("#clusterDetail");
+    box.selectAll("*").remove();
+
+    const margin = {top: 16, right: 16, bottom: 36, left: 60};
+    const width = box.node().clientWidth || 460;
+    const height = 230;
+    const innerW = width - margin.left - margin.right;
+    const innerH = height - margin.top - margin.bottom;
+
+    const svg = box.append("svg")
+      .attr("width", width)
+      .attr("height", height);
+
+    const g = svg.append("g")
+      .attr("transform", `translate(${margin.left},${margin.top})`);
+
+    const x = d3.scaleLinear().domain([0,23]).range([0, innerW]);
+    const y = d3.scaleLinear()
+      .domain([0, d3.max(grouped, d => d.trip_count) || 1])
+      .nice()
+      .range([innerH, 0]);
+
+    const line = d3.line()
+      .x(d => x(d.time_bin))
+      .y(d => y(d.trip_count));
+
+    g.append("path")
+      .datum(grouped)
+      .attr("fill","none")
+      .attr("stroke","#3b82f6")
+      .attr("stroke-width",2)
+      .attr("d", line);
+
+    g.append("g")
+      .attr("transform", `translate(0,${innerH})`)
+      .call(d3.axisBottom(x).ticks(12));
+
+    g.append("g")
+      .call(d3.axisLeft(y).ticks(4).tickFormat(d3.format(",")));
+
+    // tooltip + hover
+    const tooltip = d3.select("#clusterTooltip");
+    const hoverLine = g.append("line")
+      .attr("y1",0).attr("y2",innerH)
+      .attr("stroke","#94a3b8")
+      .attr("stroke-width",1)
+      .style("opacity",0);
+    const hoverCircle = g.append("circle")
+      .attr("r",4)
+      .attr("fill","#3b82f6")
+      .attr("stroke","#fff")
+      .attr("stroke-width",1.5)
+      .style("opacity",0);
+
+    g.append("rect")
+      .attr("width", innerW)
+      .attr("height", innerH)
+      .attr("fill","transparent")
+      .on("mousemove", (event) => {
+        const [mx] = d3.pointer(event);
+        const hour = Math.round(x.invert(mx));
+        const pt = grouped.find(d => d.time_bin === hour);
+        if (!pt) return;
+        const cx = x(pt.time_bin), cy = y(pt.trip_count);
+        hoverLine.attr("x1",cx).attr("x2",cx).style("opacity",1);
+        hoverCircle.attr("cx",cx).attr("cy",cy).style("opacity",1);
+
+        const rect = box.node().getBoundingClientRect();
+        tooltip
+          .style("display","block")
+          .style("left", (rect.left + margin.left + cx + 12) + "px")
+          .style("top", (rect.top + margin.top + cy - 10) + "px")
+          .html(`hour ${pt.time_bin}<br>${d3.format(",")(pt.trip_count)} trips`);
+      })
+      .on("mouseleave", () => {
+        hoverLine.style("opacity",0);
+        hoverCircle.style("opacity",0);
+        tooltip.style("display","none");
+      });
+
+    // title
+    d3.select("#clusterDetailTitle").text(`${readableClusterLabel(clusterId)} — hourly profile`);
+  }
+
+  // build cluster structures once
+  buildClusterStructures();
+  if (clusterTopList.length) {
+    renderClusterTable();
+    renderClusterDetail(clusterTopList[0].cluster_id);
+    highlightClusterRow(clusterTopList[0].cluster_id);
+  }
+
+  // toggle logic
+  const odMapWrap = document.getElementById("odMap");
+  const clusterView = document.getElementById("clusterView");
+  document.querySelectorAll(".od-view-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      document.querySelectorAll(".od-view-btn").forEach(b => b.classList.remove("is-active"));
+      btn.classList.add("is-active");
+      const view = btn.dataset.view;
+      if (view === "od") {
+        odMapWrap.style.display = "";
+        clusterView.style.display = "none";
+      } else {
+        odMapWrap.style.display = "none";
+        clusterView.style.display = "flex";
+      }
+    });
+  });
+
+  // initial render
+  hourLabel.textContent = fmtHour(+hourEl.value);
+  repaintHot();
+  paintOdNodesFromHot();
+  // apply initial borough filter state ("All boroughs")
+  applyBoroughFilter();
+})();
+</script>
+</body>
+</html>
