@@ -375,7 +375,7 @@
     d3.csv("data/flows.csv", d3.autoType),
     d3.csv("data/taxi_zone_lookup.csv").catch(()=>[]),
     d3.csv("data/clusters_spatiotemporal.csv", d3.autoType),
-    d3.csv("timeseries.csv", d3.autoType).catch(() => []),
+    d3.csv("data/timeseries.csv", d3.autoType).catch(() => []),
     d3.json("cluster_semantics.json").catch(() => ({}))
   ]);
 
