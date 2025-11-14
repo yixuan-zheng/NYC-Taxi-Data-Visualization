@@ -45,7 +45,7 @@
     padding:10px 12px;
     display:flex;
     flex-direction:column;
-    gap:6px;
+    gap:8px; /* slightly tighter vertical spacing for more map space */
     box-shadow:0 10px 25px rgba(15,23,42,.05);
   }
   .panel-title{font-weight:600;font-size:14px}
@@ -58,6 +58,10 @@
     box-shadow:0 16px 40px rgba(15,23,42,.05), 0 0 0 1px rgba(148,163,184,.25);
     flex:1 1 0;
     min-height:420px;
+  }
+  /* Give the OD map a bit more vertical breathing room */
+  #odMap{
+    min-height:520px;
   }
   .map-wrap svg{width:100%;height:100%}
 
@@ -92,7 +96,7 @@
     display:flex;
     flex-direction:column;
     gap:4px;
-    max-width:190px;
+    max-width:140px;
   }
   #hotLegend .legend-bar{
     width:120px;
@@ -103,28 +107,37 @@
 
   /* OD legend (right) — make it a bit longer & right-aligned */
   #odLegend{
-    background:#f1f5f9;
-    border:1px solid rgba(148,163,184,.35);
-    border-radius:10px;
-    padding:6px 8px;
-    display:flex;
-    flex-direction:column;
-    gap:4px;
-    max-width:240px;
+      background:#f1f5f9;
+      border:1px solid rgba(148,163,184,.35);
+      border-radius:10px;
+      padding:4px 6px;     /* made smaller */
+      display:flex;
+      flex-direction:column;
+      gap:3px;             /* tighter layout */
+      max-width:250px;     /* slightly narrower */
+      margin-top:-25px;     /* pull legend upward */
   }
   #odLegend .legend-bar{
-    width:180px;
+    width:100%;
   }
   #odLegend .legend-labels{
-    width:180px;
+    width:100%; 
   }
 
   .od-controls{
-    display:flex;
-    align-items:center;
-    gap:10px;
-    justify-content:space-between;
-    flex-wrap:wrap;
+      display:flex;
+      align-items:flex-start;   /* tighter vertical alignment */
+      gap:6px;                  /* reduce vertical spacing */
+      justify-content:space-between;
+      flex-wrap:wrap;
+      margin-bottom:2px;        /* pull legend closer to caption */
+  }
+
+  #odSummary{
+      margin-top:-6px;   /* lift it up */
+  }
+  #odDbg{
+      margin-top:-6px;   /* lift debug text too */
   }
 
   select,input[type=range]{font:inherit}
@@ -146,7 +159,7 @@
   .od-toggle {
     display:flex;
     gap:6px;
-    margin-top:4px;
+    margin-top:2px;
   }
   .od-view-btn {
     border:1px solid rgba(148,163,184,.5);
@@ -244,7 +257,7 @@
         <div class="hint">Fill = trips at the selected hour. Black stroke = zone; red stroke = noise. Hover to inspect.</div>
         <div id="hotStats" class="hint"></div>
         <div class="legend-box" id="hotLegend">
-          <div class="legend-title">Trips/hr</div>
+          <div class="legend-title">Trips/Hour</div>
           <div class="legend-bar hot"></div>
           <div class="legend-labels">
             <span id="legendStart">0</span>
@@ -365,7 +378,13 @@
   // OD zoom will be attached after nodes are created (so we can scale their radius)
 
   // click empty space on left panel to exit lock-in
-  hotSvg.on("click", () => {
+  hotSvg.on("click", (event) => {
+    if (isAutoZooming) return;
+
+    // only treat clicks on the *background* SVG,
+    // not on zone paths or other elements
+    if (event.target && event.target.tagName !== "svg") return;
+
     clearSelectionAndReset();
   });
 
@@ -528,12 +547,41 @@
   let selectedPrimary = null;
   let selectedSecondary = null;
   let currentHoverId = null;
+  let isAutoZooming = false;
 
   function zoomToBorough(b) {
     // reset to full city view
     if (!b || b === "__all__") {
-      hotSvg.transition().duration(500).call(hotZoom.transform, d3.zoomIdentity);
-      odSvg.transition().duration(500).call(odZoom.transform, d3.zoomIdentity);
+      const reset = d3.zoomIdentity;
+
+      isAutoZooming = true;
+
+      hotSvg
+        .interrupt()
+        .transition()
+        .duration(400)
+        .ease(d3.easeCubicInOut)
+        .call(hotZoom.transform, reset)
+        .on("end", () => {
+          isAutoZooming = false;
+        })
+        .on("interrupt", () => {
+          isAutoZooming = false;
+        });
+
+      odSvg
+        .interrupt()
+        .transition()
+        .duration(400)
+        .ease(d3.easeCubicInOut)
+        .call(odZoom.transform, reset)
+        .on("end", () => {
+          isAutoZooming = false;
+        })
+        .on("interrupt", () => {
+          isAutoZooming = false;
+        });
+
       return;
     }
 
@@ -568,7 +616,21 @@
     const txHot = hotWidth / 2 - scaleHot * cx;
     const tyHot = hotHeight / 2 - scaleHot * cy;
     const tHot = d3.zoomIdentity.translate(txHot, tyHot).scale(scaleHot);
-    hotSvg.transition().duration(600).call(hotZoom.transform, tHot);
+
+    isAutoZooming = true;
+
+    hotSvg
+      .interrupt()
+      .transition()
+      .duration(400)
+      .ease(d3.easeCubicInOut)
+      .call(hotZoom.transform, tHot)
+      .on("end", () => {
+        isAutoZooming = false;
+      })
+      .on("interrupt", () => {
+        isAutoZooming = false;
+      });
 
     // ----- RIGHT PANEL (OD map) -----
     let ox0 = Infinity, oy0 = Infinity, ox1 = -Infinity, oy1 = -Infinity;
@@ -583,7 +645,7 @@
     if (!isFinite(ox0)) return;
 
     const odDx = ox1 - ox0;
-    const odDy = oy1 - oy0;
+    const odDy = oy1 - oy0;   // ✅ fixed here
     const odCx = (ox0 + ox1) / 2;
     const odCy = (oy0 + oy1) / 2;
     const scaleOd = Math.max(
@@ -596,7 +658,58 @@
     const txOd = odWidth / 2 - scaleOd * odCx;
     const tyOd = odHeight / 2 - scaleOd * odCy;
     const tOd = d3.zoomIdentity.translate(txOd, tyOd).scale(scaleOd);
-    odSvg.transition().duration(600).call(odZoom.transform, tOd);
+
+    isAutoZooming = true;
+
+    odSvg
+      .interrupt()
+      .transition()
+      .duration(400)
+      .ease(d3.easeCubicInOut)
+      .call(odZoom.transform, tOd)
+      .on("end", () => {
+        isAutoZooming = false;
+      })
+      .on("interrupt", () => {
+        isAutoZooming = false;
+      });
+  }
+
+  function zoomToZone(zoneId) {
+    const feature = zones.features.find(f => +f.properties.LocationID === zoneId);
+    if (!feature) return;
+
+    const b = hotPath.bounds(feature);
+    if (!b) return;
+
+    const x0 = b[0][0], y0 = b[0][1];
+    const x1 = b[1][0], y1 = b[1][1];
+
+    const dx = x1 - x0;
+    const dy = y1 - y0;
+    const cx = (x0 + x1) / 2;
+    const cy = (y0 + y1) / 2;
+
+    const scale = Math.max(
+      1,
+      Math.min(
+        6,
+        0.9 / Math.max(dx / hotWidth, dy / hotHeight)
+      )
+    );
+
+    const tx = hotWidth / 2 - scale * cx;
+    const ty = hotHeight / 2 - scale * cy;
+
+    const t = d3.zoomIdentity.translate(tx, ty).scale(scale);
+
+    // smooth easing like iOS app transitions
+    hotSvg
+      .interrupt()
+      .transition()
+      .duration(450)
+      .ease(d3.easeCubicInOut)
+      .call(hotZoom.transform, t);
   }
 
   function clearSelectionAndReset(){
@@ -631,20 +744,30 @@
     .attr("r", 4)
     .attr("cx", d => d.x)
     .attr("cy", d => d.y)
-    .on("mouseenter", (event,d) => {
+    .on("mouseenter", (event, d) => {
+      // ❗ Ignore hover while auto-zooming to avoid jitter/lag
+      if (isAutoZooming) return;
+
       highlightBoth(d.id);
-      odTip.style("opacity",1)
-        .style("left",(event.offsetX+10)+"px")
-        .style("top",(event.offsetY+10)+"px")
+      odTip.style("opacity", 1)
+        .style("left", (event.offsetX + 10) + "px")
+        .style("top", (event.offsetY + 10) + "px")
         .html(`<b>${d.zone} - ${d.borough}</b>`);
     })
     .on("mouseleave", () => {
-      odTip.style("opacity",0);
+      // Also ignore leave during auto-zoom; we'll restore after zoom ends
+      if (isAutoZooming) return;
+
+      odTip.style("opacity", 0);
       currentHoverId = null;
       restoreViews();
     })
-    .on("click", (event,d) => {
+    .on("click", (event, d) => {
       event.stopPropagation();
+
+      // Optional: block clicks during auto-zoom so state doesn't thrash
+      if (isAutoZooming) return;
+
       if (selectedPrimary === null) {
         selectedPrimary = d.id;
         selectedSecondary = null;
@@ -660,7 +783,6 @@
       selectedSecondary = null;
       renderODForPrimary();
     });
-
   const odZoom = d3.zoom()
     .scaleExtent([1,6])
     .on("zoom", (e) => {
@@ -801,36 +923,47 @@
         const val = row ? +row.intensity_hour : 0;
         return hotColor(val);
       })
-      .attr("fill-opacity", 0.95) // base: bright everywhere; filtering/selection will adjust
+      .attr("fill-opacity", 0.95) // base: bright; applyBoroughFilter adjusts dimming
       .attr("stroke", d => {
         const id = +d.properties.LocationID;
         const row = stByKey.get(`${id}|${hour}`);
-        // keep noise zones red, others black
+        // keep noise zones red, others black (borough logic handled in applyBoroughFilter)
         return row && +row.cluster_id === -1 ? "#dc2626" : "#000";
       })
       .on("mousemove", (event, d) => {
+        // allow hover even during auto-zoom
         const hour = +hourEl.value;
         const id = +d.properties.LocationID;
         const row = stByKey.get(`${id}|${hour}`);
-        const meta = idTo.get(id);
-        const zoneName = d.properties.Zone || meta?.zone || "Unknown zone";
-        const borough = d.properties.Borough || meta?.borough || "";
+        const zoneName = d.properties.Zone || idTo.get(id)?.zone || "Unknown zone";
+        const borough = d.properties.Borough || idTo.get(id)?.borough || "";
+        const isSelected = (selectedPrimary !== null && id === selectedPrimary);
 
+        // cross-panel highlighting (selection-aware)
         highlightBoth(id);
 
         let html = "";
 
-        if (selectedPrimary !== null && id !== selectedPrimary) {
-          // lock-in view but hovering a non-selected zone:
-          // only show basic info to keep things clean
+        if (selectedPrimary !== null && !isSelected) {
+          // A zone is selected, but we're hovering a *different* zone:
+          // keep tooltip minimal: just name + borough
           html = `<div><b>${zoneName}</b>${borough ? " — " + borough : ""}</div>`;
         } else {
-          // no selection OR hovering selected zone: show full details
+          // No selection OR hovering the selected zone itself:
+          // show full detail caption
           html = `<div><b>${zoneName}</b>${borough ? " — " + borough : ""}</div>`;
           html += `<div>Hour: ${fmtHour(hour)}</div>`;
           html += `<div>Trips (this hour): ${row ? (+row.intensity_hour).toLocaleString() : 0}</div>`;
-          html += `<div>Avg fare (this hour): ${row && isFinite(+row.avg_fare_hour) ? "$"+(+row.avg_fare_hour).toFixed(2) : "—"}</div>`;
-          html += `<div>Avg duration (this hour): ${row && isFinite(+row.avg_duration_min_hour) ? (+row.avg_duration_min_hour).toFixed(1)+" min" : "—"}</div>`;
+          html += `<div>Avg fare (this hour): ${
+            row && isFinite(+row.avg_fare_hour)
+              ? "$" + (+row.avg_fare_hour).toFixed(2)
+              : "—"
+          }</div>`;
+          html += `<div>Avg duration (this hour): ${
+            row && isFinite(+row.avg_duration_min_hour)
+              ? (+row.avg_duration_min_hour).toFixed(1) + " min"
+              : "—"
+          }</div>`;
         }
 
         hotTip.style("opacity",1)
@@ -839,15 +972,19 @@
           .html(html);
       })
       .on("mouseleave", () => {
+        // allow immediate restore even during zoom
         hotTip.style("opacity",0);
         currentHoverId = null;
         restoreViews();
       })
       .on("click", (event, d) => {
+        // IMPORTANT: prevent the background hotSvg click-reset from firing
         event.stopPropagation();
+        if (isAutoZooming) return;
+
         const id = +d.properties.LocationID;
 
-        // respect borough filter using unified borough lookup
+        // respect borough filter: only clickable if in selected borough (when filter active)
         const b = boroFilterEl.value;
         const bd = getZoneBoroughById(id);
         const inFilter = (b === "__all__" || bd === b);
@@ -855,12 +992,14 @@
 
         selectedPrimary = id;
         selectedSecondary = null;
+
+        // render flows and lock-in view on the right panel
         renderODForPrimary();
-        // after selecting, we want the left map to dim all others:
-        applyBoroughFilter();
       });
 
-    hotStats.text(`Spatiotemporal • Hour: ${fmtHour(hour)} • Max intensity: ${maxIntensityHour.toLocaleString()} trips/hour`);
+    hotStats.text(
+      `Spatiotemporal • Hour: ${fmtHour(hour)} • Max intensity: ${maxIntensityHour.toLocaleString()} trips/hour`
+    );
   }
 
   function adjustOdZoomToFlows(primaryId, shownPairs){
@@ -899,7 +1038,21 @@
     const ty = odHeight / 2 - scale * cy;
 
     const t = d3.zoomIdentity.translate(tx, ty).scale(scale);
-    odSvg.transition().duration(600).call(odZoom.transform, t);
+
+    isAutoZooming = true;
+
+    odSvg
+      .interrupt()
+      .transition()
+      .duration(400)
+      .ease(d3.easeCubicInOut)
+      .call(odZoom.transform, t)
+      .on("end", () => {
+        isAutoZooming = false;
+      })
+      .on("interrupt", () => {
+        isAutoZooming = false;
+      });
   }
 
   // OD renderer
@@ -998,18 +1151,23 @@
         .attr("stroke","transparent")
         .attr("stroke-width", Math.max(sw+8, 12))
         .on("mousemove", (event) => {
+          if (isAutoZooming) return;  // avoid updating tooltip during zoom
+
           const baseA = `${primary.zone} - ${primary.borough}`;
           const other = idTo.get(d.otherId);
           const baseB = `${other.zone} - ${other.borough}`;
           let html = `<b>${baseA} ⇄ ${baseB}</b><br>total trips: ${d.total.toLocaleString()}`;
           if (d.outCount > 0) html += `<br>${baseA} → ${baseB}: ${d.outCount.toLocaleString()}`;
           if (d.inCount > 0) html += `<br>${baseB} → ${baseA}: ${d.inCount.toLocaleString()}`;
+
           odTip.style("opacity",1)
             .style("left",(event.offsetX+12)+"px")
             .style("top",(event.offsetY+12)+"px")
             .html(html);
         })
         .on("mouseleave", () => {
+          if (isAutoZooming) return;
+
           odTip.style("opacity",0);
         })
         .on("click", (event) => {
@@ -1029,7 +1187,7 @@
     // update left/right maps to respect borough + selection
     applyBoroughFilter();
 
-    // auto zoom OD map to keep flows in view
+    // auto zoom OD map (right panel) to keep flows in view
     adjustOdZoomToFlows(primaryId, shownPairs);
   }
 
@@ -1049,71 +1207,118 @@
   function highlightBoth(zoneId){
     currentHoverId = zoneId;
     const b = boroFilterEl.value;
+    const hasSelection = (selectedPrimary !== null);
 
-    // If a primary zone is selected, selection wins:
-    // keep only that zone bright; hovering should not override that layout.
-    if (selectedPrimary !== null) {
-      hotZonePaths
-        .attr("fill-opacity", d => {
-          const id = +d.properties.LocationID;
-          return id === selectedPrimary ? 1 : 0.15;
-        })
-        .attr("stroke-width", d => {
-          const id = +d.properties.LocationID;
-          return id === selectedPrimary ? 1.4 : 0.6;
-        });
-      // OD nodes are controlled by renderODForPrimary in lock-in view.
-      return;
-    }
-
-    // No selection: hover-based cross-highlighting.
+    // --- HOTSPOT MAP (LEFT) ---
     hotZonePaths
       .attr("fill-opacity", d => {
         const id = +d.properties.LocationID;
         const bd = getZoneBoroughById(id);
         const inFilter = (b === "__all__" || bd === b);
 
-        // out-of-borough zones stay dim when a filter is active
-        if (!inFilter && b !== "__all__") return 0.15;
-
-        if (b === "__all__") {
-          // no borough filter: hovered bright, others dim
-          return id === zoneId ? 1 : 0.2;
-        } else {
-          // borough selected:
-          // hovered in-borough: bright
-          // other in-borough: dim but still more visible
-          // out-of-borough handled above
-          if (!inFilter) return 0.15;
-          return id === zoneId ? 1 : 0.35;
+        // Always keep out-of-borough zones dim when a filter is active
+        if (!inFilter && b !== "__all__") {
+          return 0.15;
         }
+
+        // --------- CASE A: NO SELECTION (same behavior as before) ---------
+        if (!hasSelection) {
+          if (b === "__all__") {
+            // All boroughs: hovered bright, others dim
+            return id === zoneId ? 1 : 0.2;
+          } else {
+            // Borough selected: hovered bright, other in-borough moderately dim
+            return id === zoneId ? 1 : 0.35;
+          }
+        }
+
+        // --------- CASE B: SELECTION ACTIVE (lock-in view) ---------
+        // We want this to feel as responsive as no-selection hover,
+        // but still keep the selected zone clearly visible.
+
+        // Hovering the selected zone itself
+        if (id === selectedPrimary && id === zoneId) {
+          return 1;
+        }
+
+        // Selected zone (not currently hovered) stays bright
+        if (id === selectedPrimary) {
+          return 0.9;
+        }
+
+        // Hovered *other* zone should pop strongly too
+        if (id === zoneId) {
+          return 1;
+        }
+
+        // Other in-borough zones: softly dimmed but still visible
+        return (b === "__all__") ? 0.25 : 0.25;
       })
       .attr("stroke-width", d => {
         const id = +d.properties.LocationID;
-        return id === zoneId ? 1.5 : 0.7;
+
+        // No selection: original behavior
+        if (!hasSelection) {
+          return id === zoneId ? 1.5 : 0.7;
+        }
+
+        // With selection: keep selected thick, hovered slightly thicker
+        if (id === selectedPrimary) return 1.6;
+        if (id === zoneId) return 1.2;
+        return 0.7;
       })
       .attr("stroke", d => {
         const id = +d.properties.LocationID;
         const bd = getZoneBoroughById(id);
         const inFilter = (b === "__all__" || bd === b);
 
-        if (b === "__all__") {
-          // global mode: hovered gets blue border, others black
-          return id === zoneId ? "#1d4ed8" : "#000";
-        } else {
-          // borough mode:
-          // in-borough zones (hovered or not) get blue borders, out-of-borough grey
-          if (!inFilter) return "rgba(148,163,184,.6)";
+        // No selection: original behavior preserved
+        if (!hasSelection) {
+          if (b === "__all__") {
+            // global mode: hovered gets blue border, others black
+            return id === zoneId ? "#1d4ed8" : "#000";
+          } else {
+            // borough mode:
+            // in-borough zones (hovered or not) get blue borders, out-of-borough grey
+            if (!inFilter) return "rgba(148,163,184,.6)";
+            return "#1d4ed8";
+          }
+        }
+
+        // With selection:
+        // Out-of-borough stays muted if filter is active
+        if (!inFilter && b !== "__all__") {
+          return "rgba(148,163,184,.6)";
+        }
+
+        // Selected zone: strong blue border
+        if (id === selectedPrimary) {
           return "#1d4ed8";
         }
+
+        // Hovered zone (even if not selected): slightly different blue to pop
+        if (id === zoneId) {
+          return "#2563eb";
+        }
+
+        // Other in-borough zones
+        if (b === "__all__") {
+          return "#000";
+        }
+        return "#1d4ed8";
       });
 
-    odNodesSel
-      .attr("opacity", d => {
-        const inFilter = (b === "__all__" || d.borough === b);
-        if (!inFilter) return 0.2;          // dim out-of-borough nodes
-        return d.id === zoneId ? 1 : 0.15;  // highlight hovered zone's dot, dim others
-      });
+    // --- OD NODES (RIGHT) ---
+    // When a primary is selected we let renderODForPrimary control node styling,
+    // so we only adjust OD nodes in the no-selection case.
+    if (!hasSelection) {
+      odNodesSel
+        .attr("opacity", d => {
+          const inFilter = (b === "__all__" || d.borough === b);
+          if (!inFilter) return 0.2;          // dim out-of-borough nodes
+          return d.id === zoneId ? 1 : 0.15;  // highlight hovered zone's dot, dim others
+        });
+    }
   }
 
   function restoreViews(){
