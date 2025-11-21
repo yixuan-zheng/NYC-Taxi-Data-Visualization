@@ -1,122 +1,509 @@
 {
-  "0": {
-    "cluster_id": 0,
-    "label": "Airport hub",
-    "total_intensity": 18958046,
-    "boroughs": [
-      "Queens",
-      "Brooklyn",
-      "Manhattan"
+  "67": {
+    "label": "Midtown \u2194 EWR",
+    "top_zones": [
+      "Times Sq/Theatre District",
+      "East Chelsea",
+      "TriBeCa/Civic Center",
+      "Newark Airport"
     ],
+    "from_area": "Midtown",
+    "to_area": "EWR",
+    "from_borough_area": "Manhattan area",
+    "to_borough_area": "EWR area",
+    "total_trips": 12536,
+    "n_pairs": 31
+  },
+  "83": {
+    "label": "Midtown \u2194 Upper West Side",
+    "top_zones": [
+      "Times Sq/Theatre District",
+      "Clinton East",
+      "West Chelsea/Hudson Yards",
+      "Upper West Side North",
+      "Morningside Heights",
+      "Manhattan Valley"
+    ],
+    "from_area": "Midtown",
+    "to_area": "Upper West Side",
+    "from_borough_area": "Manhattan area",
+    "to_borough_area": "Manhattan area",
+    "total_trips": 7218,
+    "n_pairs": 84
+  },
+  "97": {
+    "label": "Midtown \u2194 Upper East Side",
+    "top_zones": [
+      "Midtown Center",
+      "Times Sq/Theatre District",
+      "Sutton Place/Turtle Bay North",
+      "Upper East Side North",
+      "Yorkville West",
+      "Central Park"
+    ],
+    "from_area": "Midtown",
+    "to_area": "Upper East Side",
+    "from_borough_area": "Manhattan area",
+    "to_borough_area": "Manhattan area",
+    "total_trips": 14097,
+    "n_pairs": 80
+  },
+  "99": {
+    "label": "Chelsea \u2194 Midtown",
+    "top_zones": [
+      "Union Sq",
+      "Gramercy",
+      "East Chelsea",
+      "Times Sq/Theatre District",
+      "Midtown Center",
+      "Clinton East"
+    ],
+    "from_area": "Chelsea",
+    "to_area": "Midtown",
+    "from_borough_area": "Manhattan area",
+    "to_borough_area": "Manhattan area",
+    "total_trips": 51260,
+    "n_pairs": 127
+  },
+  "147": {
+    "label": "Midtown \u2194 JFK",
+    "top_zones": [
+      "Times Sq/Theatre District",
+      "Midtown South",
+      "East Chelsea",
+      "JFK Airport"
+    ],
+    "from_area": "Midtown",
+    "to_area": "JFK",
+    "from_borough_area": "Manhattan area",
+    "to_borough_area": "Queens area",
+    "total_trips": 17031,
+    "n_pairs": 31
+  },
+  "153": {
+    "label": "Midtown \u2194 Upper West Side",
+    "top_zones": [
+      "Times Sq/Theatre District",
+      "Midtown Center",
+      "West Chelsea/Hudson Yards",
+      "Lincoln Square East",
+      "Lincoln Square West"
+    ],
+    "from_area": "Midtown",
+    "to_area": "Upper West Side",
+    "from_borough_area": "Manhattan area",
+    "to_borough_area": "Manhattan area",
+    "total_trips": 8815,
+    "n_pairs": 37
+  },
+  "716": {
+    "label": "Downtown \u2194 Midtown",
+    "top_zones": [
+      "Financial District North",
+      "Battery Park City",
+      "World Trade Center",
+      "West Chelsea/Hudson Yards",
+      "East Chelsea",
+      "Times Sq/Theatre District"
+    ],
+    "from_area": "Downtown",
+    "to_area": "Midtown",
+    "from_borough_area": "Manhattan area",
+    "to_borough_area": "Manhattan area",
+    "total_trips": 17147,
+    "n_pairs": 126
+  },
+  "736": {
+    "label": "Downtown \u2194 Tribeca",
+    "top_zones": [
+      "Financial District North",
+      "Battery Park City",
+      "World Trade Center",
+      "TriBeCa/Civic Center",
+      "Lower East Side",
+      "West Village"
+    ],
+    "from_area": "Downtown",
+    "to_area": "Tribeca",
+    "from_borough_area": "Manhattan area",
+    "to_borough_area": "Manhattan area",
+    "total_trips": 12204,
+    "n_pairs": 62
+  },
+  "1706": {
+    "label": "Upper West Side \u2194 Midtown",
+    "top_zones": [
+      "Upper West Side North",
+      "Manhattan Valley",
+      "Morningside Heights",
+      "Midtown Center",
+      "West Chelsea/Hudson Yards",
+      "Midtown North"
+    ],
+    "from_area": "Upper West Side",
+    "to_area": "Midtown",
+    "from_borough_area": "Manhattan area",
+    "to_borough_area": "Manhattan area",
+    "total_trips": 6914,
+    "n_pairs": 84
+  },
+  "3410": {
+    "label": "Upper East Side \u2194 Midtown",
+    "top_zones": [
+      "Upper East Side North",
+      "Yorkville West",
+      "Yorkville East",
+      "Midtown Center",
+      "Midtown East",
+      "Times Sq/Theatre District"
+    ],
+    "from_area": "Upper East Side",
+    "to_area": "Midtown",
+    "from_borough_area": "Manhattan area",
+    "to_borough_area": "Manhattan area",
+    "total_trips": 14239,
+    "n_pairs": 80
+  },
+  "3479": {
+    "label": "Upper East Side \u2194 Upper East Side",
+    "top_zones": [
+      "Upper East Side North",
+      "Yorkville West",
+      "Yorkville East",
+      "Upper East Side South",
+      "Lenox Hill West",
+      "Lenox Hill East"
+    ],
+    "from_area": "Upper East Side",
+    "to_area": "Upper East Side",
+    "from_borough_area": "Manhattan area",
+    "to_borough_area": "Manhattan area",
+    "total_trips": 5612,
+    "n_pairs": 24
+  },
+  "3721": {
+    "label": "Midtown \u2194 Hudson Yards",
+    "top_zones": [
+      "Times Sq/Theatre District",
+      "Midtown Center",
+      "Clinton East",
+      "Union Sq",
+      "East Chelsea",
+      "West Chelsea/Hudson Yards"
+    ],
+    "from_area": "Midtown",
+    "to_area": "Hudson Yards",
+    "from_borough_area": "Manhattan area",
+    "to_borough_area": "Manhattan area",
+    "total_trips": 51699,
+    "n_pairs": 127
+  },
+  "3726": {
+    "label": "Midtown \u2194 Downtown",
+    "top_zones": [
+      "West Chelsea/Hudson Yards",
+      "Times Sq/Theatre District",
+      "East Chelsea",
+      "Financial District North",
+      "Battery Park City",
+      "World Trade Center"
+    ],
+    "from_area": "Midtown",
+    "to_area": "Downtown",
+    "from_borough_area": "Manhattan area",
+    "to_borough_area": "Manhattan area",
+    "total_trips": 17807,
+    "n_pairs": 126
+  },
+  "3741": {
+    "label": "Midtown \u2194 Midtown",
+    "top_zones": [
+      "Clinton East",
+      "Clinton West",
+      "Times Sq/Theatre District",
+      "Midtown Center",
+      "Midtown East"
+    ],
+    "from_area": "Midtown",
+    "to_area": "Midtown",
+    "from_borough_area": "Manhattan area",
+    "to_borough_area": "Manhattan area",
+    "total_trips": 9988,
+    "n_pairs": 21
+  },
+  "3742": {
+    "label": "Midtown \u2194 Midtown",
+    "top_zones": [
+      "Midtown Center",
+      "Midtown East",
+      "Sutton Place/Turtle Bay North",
+      "Clinton West",
+      "Clinton East",
+      "Times Sq/Theatre District"
+    ],
+    "from_area": "Midtown",
+    "to_area": "Midtown",
+    "from_borough_area": "Manhattan area",
+    "to_borough_area": "Manhattan area",
+    "total_trips": 7552,
+    "n_pairs": 14
+  },
+  "3756": {
+    "label": "Chelsea \u2194 East Village",
+    "top_zones": [
+      "Union Sq",
+      "East Chelsea",
+      "Murray Hill",
+      "East Village"
+    ],
+    "from_area": "Chelsea",
+    "to_area": "East Village",
+    "from_borough_area": "Manhattan area",
+    "to_borough_area": "Manhattan area",
+    "total_trips": 8866,
+    "n_pairs": 16
+  },
+  "3773": {
+    "label": "Hudson Yards \u2194 Tribeca",
+    "top_zones": [
+      "Union Sq",
+      "West Chelsea/Hudson Yards",
+      "East Chelsea",
+      "West Village",
+      "TriBeCa/Civic Center",
+      "Meatpacking/West Village West"
+    ],
+    "from_area": "Hudson Yards",
+    "to_area": "Tribeca",
+    "from_borough_area": "Manhattan area",
+    "to_borough_area": "Manhattan area",
+    "total_trips": 56011,
+    "n_pairs": 180
+  },
+  "3785": {
+    "label": "Midtown \u2194 LaGuardia",
+    "top_zones": [
+      "Times Sq/Theatre District",
+      "Midtown Center",
+      "Midtown South",
+      "LaGuardia Airport"
+    ],
+    "from_area": "Midtown",
+    "to_area": "LaGuardia",
+    "from_borough_area": "Manhattan area",
+    "to_borough_area": "Queens area",
+    "total_trips": 19807,
+    "n_pairs": 19
+  },
+  "3787": {
+    "label": "Midtown \u2194 Upper East Side",
+    "top_zones": [
+      "Midtown Center",
+      "Midtown East",
+      "Murray Hill",
+      "Upper East Side South",
+      "Lenox Hill West",
+      "Lenox Hill East"
+    ],
+    "from_area": "Midtown",
+    "to_area": "Upper East Side",
+    "from_borough_area": "Manhattan area",
+    "to_borough_area": "Manhattan area",
+    "total_trips": 15988,
+    "n_pairs": 89
+  },
+  "5260": {
+    "label": "Midtown \u2194 Midtown",
+    "top_zones": [
+      "East Chelsea",
+      "West Chelsea/Hudson Yards",
+      "Midtown South",
+      "Murray Hill",
+      "UN/Turtle Bay South"
+    ],
+    "from_area": "Midtown",
+    "to_area": "Midtown",
+    "from_borough_area": "Manhattan area",
+    "to_borough_area": "Manhattan area",
+    "total_trips": 10521,
+    "n_pairs": 20
+  },
+  "6433": {
+    "label": "East Village \u2194 Midtown",
+    "top_zones": [
+      "East Village",
+      "Murray Hill",
+      "Penn Station/Madison Sq West",
+      "East Chelsea"
+    ],
+    "from_area": "East Village",
+    "to_area": "Midtown",
+    "from_borough_area": "Manhattan area",
+    "to_borough_area": "Manhattan area",
+    "total_trips": 9840,
+    "n_pairs": 16
+  },
+  "8575": {
+    "label": "Tribeca \u2194 Downtown",
+    "top_zones": [
+      "TriBeCa/Civic Center",
+      "Lower East Side",
+      "Little Italy/NoLiTa",
+      "Financial District North",
+      "Battery Park City",
+      "World Trade Center"
+    ],
+    "from_area": "Tribeca",
+    "to_area": "Downtown",
+    "from_borough_area": "Manhattan area",
+    "to_borough_area": "Manhattan area",
+    "total_trips": 13074,
+    "n_pairs": 62
+  },
+  "8587": {
+    "label": "Tribeca \u2194 Hudson Yards",
+    "top_zones": [
+      "West Village",
+      "TriBeCa/Civic Center",
+      "Lower East Side",
+      "West Chelsea/Hudson Yards",
+      "East Chelsea",
+      "Union Sq"
+    ],
+    "from_area": "Tribeca",
+    "to_area": "Hudson Yards",
+    "from_borough_area": "Manhattan area",
+    "to_borough_area": "Manhattan area",
+    "total_trips": 60411,
+    "n_pairs": 180
+  },
+  "8609": {
+    "label": "West Village \u2194 Lower East Side",
+    "top_zones": [
+      "West Village",
+      "Meatpacking/West Village West",
+      "Greenwich Village South",
+      "Lower East Side",
+      "Little Italy/NoLiTa",
+      "SoHo"
+    ],
+    "from_area": "West Village",
+    "to_area": "Lower East Side",
+    "from_borough_area": "Manhattan area",
+    "to_borough_area": "Manhattan area",
+    "total_trips": 6690,
+    "n_pairs": 16
+  },
+  "8647": {
+    "label": "Lower East Side \u2194 West Village",
+    "top_zones": [
+      "Lower East Side",
+      "Little Italy/NoLiTa",
+      "SoHo",
+      "West Village",
+      "Meatpacking/West Village West",
+      "Greenwich Village South"
+    ],
+    "from_area": "Lower East Side",
+    "to_area": "West Village",
+    "from_borough_area": "Manhattan area",
+    "to_borough_area": "Manhattan area",
+    "total_trips": 6731,
+    "n_pairs": 16
+  },
+  "9964": {
+    "label": "JFK \u2194 Midtown",
+    "top_zones": [
+      "JFK Airport",
+      "Times Sq/Theatre District",
+      "Midtown South",
+      "Clinton East"
+    ],
+    "from_area": "JFK",
+    "to_area": "Midtown",
+    "from_borough_area": "Queens area",
+    "to_borough_area": "Manhattan area",
+    "total_trips": 12803,
+    "n_pairs": 31
+  },
+  "10548": {
+    "label": "LaGuardia \u2194 Midtown",
     "top_zones": [
       "LaGuardia Airport",
-      "Crown Heights North",
-      "East Village"
-    ]
-  },
-  "1": {
-    "cluster_id": 1,
-    "label": "Airport hub",
-    "total_intensity": 371533,
-    "boroughs": [
-      "Queens"
+      "Times Sq/Theatre District",
+      "Midtown South",
+      "Midtown East"
     ],
-    "top_zones": [
-      "JFK Airport"
-    ]
+    "from_area": "LaGuardia",
+    "to_area": "Midtown",
+    "from_borough_area": "Queens area",
+    "to_borough_area": "Manhattan area",
+    "total_trips": 17614,
+    "n_pairs": 19
   },
-  "2": {
-    "cluster_id": 2,
-    "label": "Queens residential",
-    "total_intensity": 130116,
-    "boroughs": [
-      "Queens"
-    ],
+  "10792": {
+    "label": "Upper East Side \u2194 Upper East Side",
     "top_zones": [
-      "South Ozone Park"
-    ]
+      "Upper East Side South",
+      "Lenox Hill West",
+      "Lenox Hill East",
+      "Upper East Side North",
+      "Yorkville West",
+      "Yorkville East"
+    ],
+    "from_area": "Upper East Side",
+    "to_area": "Upper East Side",
+    "from_borough_area": "Manhattan area",
+    "to_borough_area": "Manhattan area",
+    "total_trips": 5697,
+    "n_pairs": 24
   },
-  "5": {
-    "cluster_id": 5,
-    "label": "Staten Island residential",
-    "total_intensity": 125120,
-    "boroughs": [
-      "Staten Island"
-    ],
+  "10794": {
+    "label": "Upper East Side \u2194 Midtown",
     "top_zones": [
-      "Saint George/New Brighton",
-      "Stapleton",
-      "South Beach/Dongan Hills"
-    ]
+      "Upper East Side South",
+      "Lenox Hill West",
+      "Lenox Hill East",
+      "Midtown Center",
+      "Midtown East",
+      "Times Sq/Theatre District"
+    ],
+    "from_area": "Upper East Side",
+    "to_area": "Midtown",
+    "from_borough_area": "Manhattan area",
+    "to_borough_area": "Manhattan area",
+    "total_trips": 17686,
+    "n_pairs": 82
   },
-  "3": {
-    "cluster_id": 3,
-    "label": "Queens residential",
-    "total_intensity": 84577,
-    "boroughs": [
-      "Queens"
-    ],
+  "10933": {
+    "label": "Upper West Side \u2194 Midtown",
     "top_zones": [
-      "Saint Albans"
-    ]
+      "Lincoln Square East",
+      "Lincoln Square West",
+      "Midtown Center",
+      "Times Sq/Theatre District",
+      "Midtown North"
+    ],
+    "from_area": "Upper West Side",
+    "to_area": "Midtown",
+    "from_borough_area": "Manhattan area",
+    "to_borough_area": "Manhattan area",
+    "total_trips": 10731,
+    "n_pairs": 37
   },
-  "6": {
-    "cluster_id": 6,
-    "label": "Queens residential",
-    "total_intensity": 61816,
-    "boroughs": [
-      "Queens"
-    ],
+  "16835": {
+    "label": "Upper West Side \u2194 Midtown",
     "top_zones": [
-      "Laurelton",
-      "Cambria Heights"
-    ]
-  },
-  "4": {
-    "cluster_id": 4,
-    "label": "Queens residential",
-    "total_intensity": 40762,
-    "boroughs": [
-      "Queens"
+      "Upper West Side South",
+      "Times Sq/Theatre District",
+      "Midtown North",
+      "Midtown Center"
     ],
-    "top_zones": [
-      "Far Rockaway"
-    ]
-  },
-  "7": {
-    "cluster_id": 7,
-    "label": "Queens residential",
-    "total_intensity": 37915,
-    "boroughs": [
-      "Queens"
-    ],
-    "top_zones": [
-      "Rosedale"
-    ]
-  },
-  "15": {
-    "cluster_id": 15,
-    "label": "Queens residential",
-    "total_intensity": 34079,
-    "boroughs": [
-      "Queens"
-    ],
-    "top_zones": [
-      "Bellerose",
-      "Glen Oaks"
-    ]
-  },
-  "19": {
-    "cluster_id": 19,
-    "label": "Staten Island residential",
-    "total_intensity": 32416,
-    "boroughs": [
-      "Staten Island"
-    ],
-    "top_zones": [
-      "Great Kills",
-      "New Dorp/Midland Beach",
-      "Oakwood"
-    ]
+    "from_area": "Upper West Side",
+    "to_area": "Midtown",
+    "from_borough_area": "Manhattan area",
+    "to_borough_area": "Manhattan area",
+    "total_trips": 5124,
+    "n_pairs": 20
   }
 }

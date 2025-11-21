@@ -1,0 +1,2513 @@
+{
+  "0": {
+    "label": "LaGuardia (Queens) \u2013 LaGuardia Airport (Evening)",
+    "area_key": "LaGuardia (Queens) \u2013 LaGuardia Airport",
+    "top_zones": [
+      "LaGuardia Airport"
+    ],
+    "borough_area": "Queens area",
+    "time_window": "Evening",
+    "total_intensity": 406134.0,
+    "n_zone_hours": 24,
+    "n_zones": 1,
+    "peak_hours": [
+      23,
+      21,
+      20,
+      18
+    ]
+  },
+  "1": {
+    "label": "JFK (Queens) \u2013 JFK Airport (Late night)",
+    "area_key": "JFK (Queens) \u2013 JFK Airport",
+    "top_zones": [
+      "JFK Airport"
+    ],
+    "borough_area": "Queens area",
+    "time_window": "Late night",
+    "total_intensity": 371533.0,
+    "n_zone_hours": 24,
+    "n_zones": 1,
+    "peak_hours": [
+      22,
+      23,
+      0,
+      21
+    ]
+  },
+  "2": {
+    "label": "Midtown (Manhattan) \u2013 East Village (PM peak)",
+    "area_key": "Midtown (Manhattan) \u2013 East Village",
+    "top_zones": [
+      "East Village",
+      "Times Sq/Theatre District",
+      "East Chelsea"
+    ],
+    "borough_area": "Manhattan area",
+    "time_window": "PM peak",
+    "total_intensity": 7141517.0,
+    "n_zone_hours": 1416,
+    "n_zones": 59,
+    "peak_hours": [
+      18,
+      21,
+      22,
+      19
+    ]
+  },
+  "3": {
+    "label": "Park Slope (Brooklyn) \u2013 Williamsburg (North Side) (Evening)",
+    "area_key": "Park Slope (Brooklyn) \u2013 Williamsburg (North Side)",
+    "top_zones": [
+      "Williamsburg (North Side)",
+      "Park Slope",
+      "Williamsburg (South Side)"
+    ],
+    "borough_area": "Brooklyn area",
+    "time_window": "Evening",
+    "total_intensity": 1641258.0,
+    "n_zone_hours": 408,
+    "n_zones": 17,
+    "peak_hours": [
+      22,
+      23,
+      18,
+      21
+    ]
+  },
+  "4": {
+    "label": "Crown Heights (Brooklyn) \u2013 Crown Heights North (PM peak)",
+    "area_key": "Crown Heights (Brooklyn) \u2013 Crown Heights North",
+    "top_zones": [
+      "Crown Heights North",
+      "Prospect-Lefferts Gardens",
+      "Crown Heights South"
+    ],
+    "borough_area": "Brooklyn area",
+    "time_window": "PM peak",
+    "total_intensity": 500047.0,
+    "n_zone_hours": 72,
+    "n_zones": 3,
+    "peak_hours": [
+      18,
+      17,
+      19,
+      16
+    ]
+  },
+  "5": {
+    "label": "Bushwick (Brooklyn) \u2013 Bushwick South (Late night)",
+    "area_key": "Bushwick (Brooklyn) \u2013 Bushwick South",
+    "top_zones": [
+      "Bushwick South",
+      "Bushwick North",
+      "Stuyvesant Heights"
+    ],
+    "borough_area": "Brooklyn area",
+    "time_window": "Late night",
+    "total_intensity": 566835.0,
+    "n_zone_hours": 72,
+    "n_zones": 3,
+    "peak_hours": [
+      23,
+      22,
+      0,
+      21
+    ]
+  },
+  "6": {
+    "label": "Williamsburg & Greenpoint (Brooklyn) (PM peak)",
+    "area_key": "Williamsburg & Greenpoint (Brooklyn)",
+    "top_zones": [
+      "Greenpoint"
+    ],
+    "borough_area": "Brooklyn area",
+    "time_window": "PM peak",
+    "total_intensity": 198699.0,
+    "n_zone_hours": 24,
+    "n_zones": 1,
+    "peak_hours": [
+      22,
+      23,
+      18,
+      19
+    ]
+  },
+  "7": {
+    "label": "Brooklyn \u2013 East Williamsburg (Late night)",
+    "area_key": "Brooklyn \u2013 East Williamsburg",
+    "top_zones": [
+      "East Williamsburg"
+    ],
+    "borough_area": "Brooklyn area",
+    "time_window": "Late night",
+    "total_intensity": 185341.0,
+    "n_zone_hours": 24,
+    "n_zones": 1,
+    "peak_hours": [
+      23,
+      0,
+      22,
+      1
+    ]
+  },
+  "8": {
+    "label": "Brooklyn \u2013 East New York (PM peak)",
+    "area_key": "Brooklyn \u2013 East New York",
+    "top_zones": [
+      "East New York"
+    ],
+    "borough_area": "Brooklyn area",
+    "time_window": "PM peak",
+    "total_intensity": 214422.0,
+    "n_zone_hours": 24,
+    "n_zones": 1,
+    "peak_hours": [
+      15,
+      16,
+      17,
+      8
+    ]
+  },
+  "9": {
+    "label": "Queens \u2013 Long Island City/Hunters Point (PM peak)",
+    "area_key": "Queens \u2013 Long Island City/Hunters Point",
+    "top_zones": [
+      "Long Island City/Hunters Point"
+    ],
+    "borough_area": "Queens area",
+    "time_window": "PM peak",
+    "total_intensity": 167174.0,
+    "n_zone_hours": 24,
+    "n_zones": 1,
+    "peak_hours": [
+      22,
+      18,
+      17,
+      19
+    ]
+  },
+  "10": {
+    "label": "Queens \u2013 Astoria (PM peak)",
+    "area_key": "Queens \u2013 Astoria",
+    "top_zones": [
+      "Astoria"
+    ],
+    "borough_area": "Queens area",
+    "time_window": "PM peak",
+    "total_intensity": 196472.0,
+    "n_zone_hours": 24,
+    "n_zones": 1,
+    "peak_hours": [
+      18,
+      17,
+      19,
+      22
+    ]
+  },
+  "11": {
+    "label": "Brooklyn \u2013 Flatbush/Ditmas Park (PM peak)",
+    "area_key": "Brooklyn \u2013 Flatbush/Ditmas Park",
+    "top_zones": [
+      "Flatbush/Ditmas Park",
+      "East Flatbush/Farragut",
+      "Erasmus"
+    ],
+    "borough_area": "Brooklyn area",
+    "time_window": "PM peak",
+    "total_intensity": 311238.0,
+    "n_zone_hours": 72,
+    "n_zones": 3,
+    "peak_hours": [
+      18,
+      17,
+      8,
+      16
+    ]
+  },
+  "12": {
+    "label": "Jamaica / Hillside (Queens) (PM peak)",
+    "area_key": "Jamaica / Hillside (Queens)",
+    "top_zones": [
+      "Jamaica",
+      "South Jamaica"
+    ],
+    "borough_area": "Queens area",
+    "time_window": "PM peak",
+    "total_intensity": 209035.0,
+    "n_zone_hours": 48,
+    "n_zones": 2,
+    "peak_hours": [
+      17,
+      8,
+      18,
+      14
+    ]
+  },
+  "13": {
+    "label": "Brooklyn \u2013 Canarsie (AM peak)",
+    "area_key": "Brooklyn \u2013 Canarsie",
+    "top_zones": [
+      "Canarsie"
+    ],
+    "borough_area": "Brooklyn area",
+    "time_window": "AM peak",
+    "total_intensity": 147892.0,
+    "n_zone_hours": 24,
+    "n_zones": 1,
+    "peak_hours": [
+      8,
+      7,
+      9,
+      17
+    ]
+  },
+  "14": {
+    "label": "Corona & Jackson Heights (Queens) (AM peak)",
+    "area_key": "Corona & Jackson Heights (Queens)",
+    "top_zones": [
+      "Jackson Heights"
+    ],
+    "borough_area": "Queens area",
+    "time_window": "AM peak",
+    "total_intensity": 154740.0,
+    "n_zone_hours": 24,
+    "n_zones": 1,
+    "peak_hours": [
+      8,
+      17,
+      9,
+      18
+    ]
+  },
+  "15": {
+    "label": "Queens \u2013 Forest Hills (PM peak)",
+    "area_key": "Queens \u2013 Forest Hills",
+    "top_zones": [
+      "Forest Hills"
+    ],
+    "borough_area": "Queens area",
+    "time_window": "PM peak",
+    "total_intensity": 136243.0,
+    "n_zone_hours": 24,
+    "n_zones": 1,
+    "peak_hours": [
+      17,
+      18,
+      22,
+      16
+    ]
+  },
+  "16": {
+    "label": "Washington Heights South, Washington Heights North (AM peak)",
+    "area_key": "Washington Heights South, Washington Heights North",
+    "top_zones": [
+      "Washington Heights South",
+      "Washington Heights North",
+      "West Concourse"
+    ],
+    "borough_area": "Unknown area",
+    "time_window": "AM peak",
+    "total_intensity": 722728.0,
+    "n_zone_hours": 216,
+    "n_zones": 9,
+    "peak_hours": [
+      8,
+      7,
+      17,
+      22
+    ]
+  },
+  "17": {
+    "label": "Manhattan \u2013 East Harlem North (PM peak)",
+    "area_key": "Manhattan \u2013 East Harlem North",
+    "top_zones": [
+      "East Harlem North"
+    ],
+    "borough_area": "Manhattan area",
+    "time_window": "PM peak",
+    "total_intensity": 141165.0,
+    "n_zone_hours": 24,
+    "n_zones": 1,
+    "peak_hours": [
+      18,
+      8,
+      17,
+      19
+    ]
+  },
+  "18": {
+    "label": "Corona & Jackson Heights (Queens) \u2013 Elmhurst (PM peak)",
+    "area_key": "Corona & Jackson Heights (Queens) \u2013 Elmhurst",
+    "top_zones": [
+      "Elmhurst"
+    ],
+    "borough_area": "Queens area",
+    "time_window": "PM peak",
+    "total_intensity": 137124.0,
+    "n_zone_hours": 24,
+    "n_zones": 1,
+    "peak_hours": [
+      17,
+      18,
+      19,
+      16
+    ]
+  },
+  "19": {
+    "label": "Queens \u2013 South Ozone Park (AM peak)",
+    "area_key": "Queens \u2013 South Ozone Park",
+    "top_zones": [
+      "South Ozone Park"
+    ],
+    "borough_area": "Queens area",
+    "time_window": "AM peak",
+    "total_intensity": 130116.0,
+    "n_zone_hours": 24,
+    "n_zones": 1,
+    "peak_hours": [
+      14,
+      7,
+      8,
+      18
+    ]
+  },
+  "20": {
+    "label": "Queens \u2013 Sunnyside (PM peak)",
+    "area_key": "Queens \u2013 Sunnyside",
+    "top_zones": [
+      "Sunnyside"
+    ],
+    "borough_area": "Queens area",
+    "time_window": "PM peak",
+    "total_intensity": 115966.0,
+    "n_zone_hours": 24,
+    "n_zones": 1,
+    "peak_hours": [
+      17,
+      18,
+      16,
+      15
+    ]
+  },
+  "21": {
+    "label": "The Bronx \u2013 Mott Haven/Port Morris (PM peak)",
+    "area_key": "The Bronx \u2013 Mott Haven/Port Morris",
+    "top_zones": [
+      "Mott Haven/Port Morris"
+    ],
+    "borough_area": "The Bronx area",
+    "time_window": "PM peak",
+    "total_intensity": 121797.0,
+    "n_zone_hours": 24,
+    "n_zones": 1,
+    "peak_hours": [
+      8,
+      17,
+      18,
+      16
+    ]
+  },
+  "22": {
+    "label": "Brooklyn \u2013 Brownsville (PM peak)",
+    "area_key": "Brooklyn \u2013 Brownsville",
+    "top_zones": [
+      "Brownsville"
+    ],
+    "borough_area": "Brooklyn area",
+    "time_window": "PM peak",
+    "total_intensity": 120827.0,
+    "n_zone_hours": 24,
+    "n_zones": 1,
+    "peak_hours": [
+      16,
+      15,
+      8,
+      17
+    ]
+  },
+  "23": {
+    "label": "Manhattan \u2013 East Harlem South (PM peak)",
+    "area_key": "Manhattan \u2013 East Harlem South",
+    "top_zones": [
+      "East Harlem South"
+    ],
+    "borough_area": "Manhattan area",
+    "time_window": "PM peak",
+    "total_intensity": 125493.0,
+    "n_zone_hours": 24,
+    "n_zones": 1,
+    "peak_hours": [
+      19,
+      18,
+      17,
+      15
+    ]
+  },
+  "24": {
+    "label": "Queens \u2013 Ridgewood (PM peak)",
+    "area_key": "Queens \u2013 Ridgewood",
+    "top_zones": [
+      "Ridgewood"
+    ],
+    "borough_area": "Queens area",
+    "time_window": "PM peak",
+    "total_intensity": 124553.0,
+    "n_zone_hours": 24,
+    "n_zones": 1,
+    "peak_hours": [
+      23,
+      18,
+      22,
+      19
+    ]
+  },
+  "25": {
+    "label": "Brooklyn \u2013 Flatlands (AM peak)",
+    "area_key": "Brooklyn \u2013 Flatlands",
+    "top_zones": [
+      "Flatlands"
+    ],
+    "borough_area": "Brooklyn area",
+    "time_window": "AM peak",
+    "total_intensity": 99701.0,
+    "n_zone_hours": 24,
+    "n_zones": 1,
+    "peak_hours": [
+      8,
+      9,
+      7,
+      17
+    ]
+  },
+  "26": {
+    "label": "Brooklyn \u2013 Sunset Park West (PM peak)",
+    "area_key": "Brooklyn \u2013 Sunset Park West",
+    "top_zones": [
+      "Sunset Park West"
+    ],
+    "borough_area": "Brooklyn area",
+    "time_window": "PM peak",
+    "total_intensity": 100411.0,
+    "n_zone_hours": 24,
+    "n_zones": 1,
+    "peak_hours": [
+      17,
+      18,
+      19,
+      16
+    ]
+  },
+  "27": {
+    "label": "Brooklyn \u2013 Bay Ridge (AM peak)",
+    "area_key": "Brooklyn \u2013 Bay Ridge",
+    "top_zones": [
+      "Bay Ridge"
+    ],
+    "borough_area": "Brooklyn area",
+    "time_window": "AM peak",
+    "total_intensity": 106603.0,
+    "n_zone_hours": 24,
+    "n_zones": 1,
+    "peak_hours": [
+      8,
+      17,
+      18,
+      7
+    ]
+  },
+  "28": {
+    "label": "Brooklyn \u2013 Borough Park (Midday)",
+    "area_key": "Brooklyn \u2013 Borough Park",
+    "top_zones": [
+      "Borough Park"
+    ],
+    "borough_area": "Brooklyn area",
+    "time_window": "Midday",
+    "total_intensity": 95420.0,
+    "n_zone_hours": 24,
+    "n_zones": 1,
+    "peak_hours": [
+      14,
+      10,
+      12,
+      13
+    ]
+  },
+  "29": {
+    "label": "Brooklyn \u2013 East Flatbush/Remsen Village (AM peak)",
+    "area_key": "Brooklyn \u2013 East Flatbush/Remsen Village",
+    "top_zones": [
+      "East Flatbush/Remsen Village"
+    ],
+    "borough_area": "Brooklyn area",
+    "time_window": "AM peak",
+    "total_intensity": 103120.0,
+    "n_zone_hours": 24,
+    "n_zones": 1,
+    "peak_hours": [
+      8,
+      15,
+      17,
+      9
+    ]
+  },
+  "30": {
+    "label": "The Bronx \u2013 Williamsbridge/Olinville (AM peak)",
+    "area_key": "The Bronx \u2013 Williamsbridge/Olinville",
+    "top_zones": [
+      "Williamsbridge/Olinville"
+    ],
+    "borough_area": "The Bronx area",
+    "time_window": "AM peak",
+    "total_intensity": 94931.0,
+    "n_zone_hours": 24,
+    "n_zones": 1,
+    "peak_hours": [
+      8,
+      14,
+      9,
+      15
+    ]
+  },
+  "31": {
+    "label": "The Bronx \u2013 Mount Hope (AM peak)",
+    "area_key": "The Bronx \u2013 Mount Hope",
+    "top_zones": [
+      "Mount Hope",
+      "Bedford Park",
+      "East Tremont"
+    ],
+    "borough_area": "The Bronx area",
+    "time_window": "AM peak",
+    "total_intensity": 910648.0,
+    "n_zone_hours": 408,
+    "n_zones": 17,
+    "peak_hours": [
+      8,
+      17,
+      9,
+      7
+    ]
+  },
+  "32": {
+    "label": "The Bronx \u2013 Soundview/Castle Hill (AM peak)",
+    "area_key": "The Bronx \u2013 Soundview/Castle Hill",
+    "top_zones": [
+      "Soundview/Castle Hill"
+    ],
+    "borough_area": "The Bronx area",
+    "time_window": "AM peak",
+    "total_intensity": 93657.0,
+    "n_zone_hours": 24,
+    "n_zones": 1,
+    "peak_hours": [
+      8,
+      14,
+      7,
+      17
+    ]
+  },
+  "33": {
+    "label": "Queens \u2013 Steinway (PM peak)",
+    "area_key": "Queens \u2013 Steinway",
+    "top_zones": [
+      "Steinway"
+    ],
+    "borough_area": "Queens area",
+    "time_window": "PM peak",
+    "total_intensity": 99984.0,
+    "n_zone_hours": 24,
+    "n_zones": 1,
+    "peak_hours": [
+      17,
+      8,
+      18,
+      22
+    ]
+  },
+  "34": {
+    "label": "Queens \u2013 Flushing (PM peak)",
+    "area_key": "Queens \u2013 Flushing",
+    "top_zones": [
+      "Flushing",
+      "Willets Point"
+    ],
+    "borough_area": "Queens area",
+    "time_window": "PM peak",
+    "total_intensity": 99874.0,
+    "n_zone_hours": 48,
+    "n_zones": 2,
+    "peak_hours": [
+      17,
+      18,
+      15,
+      21
+    ]
+  },
+  "35": {
+    "label": "Queens \u2013 Saint Albans (AM peak)",
+    "area_key": "Queens \u2013 Saint Albans",
+    "top_zones": [
+      "Saint Albans"
+    ],
+    "borough_area": "Queens area",
+    "time_window": "AM peak",
+    "total_intensity": 84577.0,
+    "n_zone_hours": 24,
+    "n_zones": 1,
+    "peak_hours": [
+      8,
+      9,
+      14,
+      7
+    ]
+  },
+  "36": {
+    "label": "Queens \u2013 Richmond Hill (AM peak)",
+    "area_key": "Queens \u2013 Richmond Hill",
+    "top_zones": [
+      "Richmond Hill"
+    ],
+    "borough_area": "Queens area",
+    "time_window": "AM peak",
+    "total_intensity": 85816.0,
+    "n_zone_hours": 24,
+    "n_zones": 1,
+    "peak_hours": [
+      8,
+      9,
+      7,
+      17
+    ]
+  },
+  "37": {
+    "label": "Park Slope (Brooklyn) \u2013 Prospect Heights (Evening)",
+    "area_key": "Park Slope (Brooklyn) \u2013 Prospect Heights",
+    "top_zones": [
+      "Prospect Heights"
+    ],
+    "borough_area": "Brooklyn area",
+    "time_window": "Evening",
+    "total_intensity": 73225.0,
+    "n_zone_hours": 24,
+    "n_zones": 1,
+    "peak_hours": [
+      22,
+      21,
+      18,
+      23
+    ]
+  },
+  "38": {
+    "label": "The Bronx \u2013 Co-Op City (PM peak)",
+    "area_key": "The Bronx \u2013 Co-Op City",
+    "top_zones": [
+      "Co-Op City",
+      "Eastchester"
+    ],
+    "borough_area": "The Bronx area",
+    "time_window": "PM peak",
+    "total_intensity": 133429.0,
+    "n_zone_hours": 48,
+    "n_zones": 2,
+    "peak_hours": [
+      15,
+      14,
+      17,
+      18
+    ]
+  },
+  "39": {
+    "label": "The Bronx \u2013 Norwood (PM peak)",
+    "area_key": "The Bronx \u2013 Norwood",
+    "top_zones": [
+      "Norwood"
+    ],
+    "borough_area": "The Bronx area",
+    "time_window": "PM peak",
+    "total_intensity": 79517.0,
+    "n_zone_hours": 24,
+    "n_zones": 1,
+    "peak_hours": [
+      8,
+      17,
+      16,
+      15
+    ]
+  },
+  "40": {
+    "label": "The Bronx \u2013 Van Nest/Morris Park (PM peak)",
+    "area_key": "The Bronx \u2013 Van Nest/Morris Park",
+    "top_zones": [
+      "Van Nest/Morris Park",
+      "Pelham Parkway",
+      "Parkchester"
+    ],
+    "borough_area": "The Bronx area",
+    "time_window": "PM peak",
+    "total_intensity": 232648.0,
+    "n_zone_hours": 96,
+    "n_zones": 4,
+    "peak_hours": [
+      8,
+      17,
+      16,
+      15
+    ]
+  },
+  "41": {
+    "label": "Queens \u2013 Baisley Park (AM peak)",
+    "area_key": "Queens \u2013 Baisley Park",
+    "top_zones": [
+      "Baisley Park"
+    ],
+    "borough_area": "Queens area",
+    "time_window": "AM peak",
+    "total_intensity": 65689.0,
+    "n_zone_hours": 24,
+    "n_zones": 1,
+    "peak_hours": [
+      8,
+      7,
+      9,
+      14
+    ]
+  },
+  "42": {
+    "label": "Brooklyn \u2013 Ocean Hill (PM peak)",
+    "area_key": "Brooklyn \u2013 Ocean Hill",
+    "top_zones": [
+      "Ocean Hill"
+    ],
+    "borough_area": "Brooklyn area",
+    "time_window": "PM peak",
+    "total_intensity": 85752.0,
+    "n_zone_hours": 24,
+    "n_zones": 1,
+    "peak_hours": [
+      8,
+      18,
+      17,
+      22
+    ]
+  },
+  "43": {
+    "label": "Queens \u2013 Woodside (PM peak)",
+    "area_key": "Queens \u2013 Woodside",
+    "top_zones": [
+      "Woodside"
+    ],
+    "borough_area": "Queens area",
+    "time_window": "PM peak",
+    "total_intensity": 86549.0,
+    "n_zone_hours": 24,
+    "n_zones": 1,
+    "peak_hours": [
+      18,
+      17,
+      8,
+      16
+    ]
+  },
+  "44": {
+    "label": "Queens \u2013 Woodhaven (AM peak)",
+    "area_key": "Queens \u2013 Woodhaven",
+    "top_zones": [
+      "Woodhaven"
+    ],
+    "borough_area": "Queens area",
+    "time_window": "AM peak",
+    "total_intensity": 63711.0,
+    "n_zone_hours": 24,
+    "n_zones": 1,
+    "peak_hours": [
+      8,
+      7,
+      9,
+      14
+    ]
+  },
+  "45": {
+    "label": "Brooklyn \u2013 Bensonhurst West (AM peak)",
+    "area_key": "Brooklyn \u2013 Bensonhurst West",
+    "top_zones": [
+      "Bensonhurst West"
+    ],
+    "borough_area": "Brooklyn area",
+    "time_window": "AM peak",
+    "total_intensity": 64634.0,
+    "n_zone_hours": 24,
+    "n_zones": 1,
+    "peak_hours": [
+      8,
+      14,
+      9,
+      17
+    ]
+  },
+  "46": {
+    "label": "The Bronx \u2013 Spuyten Duyvil/Kingsbridge (PM peak)",
+    "area_key": "The Bronx \u2013 Spuyten Duyvil/Kingsbridge",
+    "top_zones": [
+      "Spuyten Duyvil/Kingsbridge",
+      "Marble Hill"
+    ],
+    "borough_area": "The Bronx area",
+    "time_window": "PM peak",
+    "total_intensity": 86184.0,
+    "n_zone_hours": 48,
+    "n_zones": 2,
+    "peak_hours": [
+      17,
+      18,
+      16,
+      15
+    ]
+  },
+  "47": {
+    "label": "Queens \u2013 Queens Village (AM peak)",
+    "area_key": "Queens \u2013 Queens Village",
+    "top_zones": [
+      "Queens Village"
+    ],
+    "borough_area": "Queens area",
+    "time_window": "AM peak",
+    "total_intensity": 56962.0,
+    "n_zone_hours": 24,
+    "n_zones": 1,
+    "peak_hours": [
+      8,
+      9,
+      7,
+      14
+    ]
+  },
+  "48": {
+    "label": "The Bronx \u2013 Woodlawn/Wakefield (AM peak)",
+    "area_key": "The Bronx \u2013 Woodlawn/Wakefield",
+    "top_zones": [
+      "Woodlawn/Wakefield"
+    ],
+    "borough_area": "The Bronx area",
+    "time_window": "AM peak",
+    "total_intensity": 64164.0,
+    "n_zone_hours": 24,
+    "n_zones": 1,
+    "peak_hours": [
+      8,
+      9,
+      7,
+      14
+    ]
+  },
+  "49": {
+    "label": "Brooklyn \u2013 Midwood (AM peak)",
+    "area_key": "Brooklyn \u2013 Midwood",
+    "top_zones": [
+      "Midwood",
+      "Ocean Parkway South"
+    ],
+    "borough_area": "Brooklyn area",
+    "time_window": "AM peak",
+    "total_intensity": 74038.0,
+    "n_zone_hours": 48,
+    "n_zones": 2,
+    "peak_hours": [
+      9,
+      8,
+      10,
+      14
+    ]
+  },
+  "50": {
+    "label": "Corona & Jackson Heights (Queens) (AM peak)",
+    "area_key": "Corona & Jackson Heights (Queens)",
+    "top_zones": [
+      "Corona"
+    ],
+    "borough_area": "Queens area",
+    "time_window": "AM peak",
+    "total_intensity": 60796.0,
+    "n_zone_hours": 24,
+    "n_zones": 1,
+    "peak_hours": [
+      8,
+      9,
+      7,
+      22
+    ]
+  },
+  "51": {
+    "label": "Corona & Jackson Heights (Queens) \u2013 North Corona",
+    "area_key": "Corona & Jackson Heights (Queens) \u2013 North Corona",
+    "top_zones": [
+      "North Corona"
+    ],
+    "borough_area": "Queens area",
+    "time_window": "mixed hours",
+    "total_intensity": 47389.0,
+    "n_zone_hours": 24,
+    "n_zones": 1,
+    "peak_hours": [
+      23,
+      8,
+      22,
+      14
+    ]
+  },
+  "52": {
+    "label": "Queens \u2013 Old Astoria (PM peak)",
+    "area_key": "Queens \u2013 Old Astoria",
+    "top_zones": [
+      "Old Astoria",
+      "Astoria Park"
+    ],
+    "borough_area": "Queens area",
+    "time_window": "PM peak",
+    "total_intensity": 72063.0,
+    "n_zone_hours": 48,
+    "n_zones": 2,
+    "peak_hours": [
+      18,
+      8,
+      17,
+      19
+    ]
+  },
+  "53": {
+    "label": "Corona & Jackson Heights (Queens) \u2013 Flushing Meadows-Corona Park (Evening)",
+    "area_key": "Corona & Jackson Heights (Queens) \u2013 Flushing Meadows-Corona Park",
+    "top_zones": [
+      "Flushing Meadows-Corona Park"
+    ],
+    "borough_area": "Queens area",
+    "time_window": "Evening",
+    "total_intensity": 24990.0,
+    "n_zone_hours": 24,
+    "n_zones": 1,
+    "peak_hours": [
+      22,
+      21,
+      23,
+      20
+    ]
+  },
+  "54": {
+    "label": "Brooklyn \u2013 Marine Park/Mill Basin (PM peak)",
+    "area_key": "Brooklyn \u2013 Marine Park/Mill Basin",
+    "top_zones": [
+      "Marine Park/Mill Basin"
+    ],
+    "borough_area": "Brooklyn area",
+    "time_window": "PM peak",
+    "total_intensity": 56201.0,
+    "n_zone_hours": 24,
+    "n_zones": 1,
+    "peak_hours": [
+      17,
+      16,
+      15,
+      18
+    ]
+  },
+  "55": {
+    "label": "Brooklyn \u2013 Cypress Hills (AM peak)",
+    "area_key": "Brooklyn \u2013 Cypress Hills",
+    "top_zones": [
+      "Cypress Hills"
+    ],
+    "borough_area": "Brooklyn area",
+    "time_window": "AM peak",
+    "total_intensity": 63386.0,
+    "n_zone_hours": 24,
+    "n_zones": 1,
+    "peak_hours": [
+      8,
+      9,
+      7,
+      14
+    ]
+  },
+  "56": {
+    "label": "Brooklyn \u2013 Sheepshead Bay (AM peak)",
+    "area_key": "Brooklyn \u2013 Sheepshead Bay",
+    "top_zones": [
+      "Sheepshead Bay"
+    ],
+    "borough_area": "Brooklyn area",
+    "time_window": "AM peak",
+    "total_intensity": 60802.0,
+    "n_zone_hours": 24,
+    "n_zones": 1,
+    "peak_hours": [
+      8,
+      17,
+      9,
+      18
+    ]
+  },
+  "57": {
+    "label": "The Bronx \u2013 Schuylerville/Edgewater Park (AM peak)",
+    "area_key": "The Bronx \u2013 Schuylerville/Edgewater Park",
+    "top_zones": [
+      "Schuylerville/Edgewater Park"
+    ],
+    "borough_area": "The Bronx area",
+    "time_window": "AM peak",
+    "total_intensity": 65834.0,
+    "n_zone_hours": 24,
+    "n_zones": 1,
+    "peak_hours": [
+      7,
+      8,
+      17,
+      14
+    ]
+  },
+  "58": {
+    "label": "The Bronx \u2013 Hunts Point (PM peak)",
+    "area_key": "The Bronx \u2013 Hunts Point",
+    "top_zones": [
+      "Hunts Point"
+    ],
+    "borough_area": "The Bronx area",
+    "time_window": "PM peak",
+    "total_intensity": 60470.0,
+    "n_zone_hours": 24,
+    "n_zones": 1,
+    "peak_hours": [
+      17,
+      8,
+      16,
+      15
+    ]
+  },
+  "59": {
+    "label": "Brooklyn \u2013 East New York/Pennsylvania Avenue (PM peak)",
+    "area_key": "Brooklyn \u2013 East New York/Pennsylvania Avenue",
+    "top_zones": [
+      "East New York/Pennsylvania Avenue"
+    ],
+    "borough_area": "Brooklyn area",
+    "time_window": "PM peak",
+    "total_intensity": 59641.0,
+    "n_zone_hours": 24,
+    "n_zones": 1,
+    "peak_hours": [
+      8,
+      16,
+      15,
+      14
+    ]
+  },
+  "60": {
+    "label": "Queens \u2013 Maspeth (Late night)",
+    "area_key": "Queens \u2013 Maspeth",
+    "top_zones": [
+      "Maspeth"
+    ],
+    "borough_area": "Queens area",
+    "time_window": "Late night",
+    "total_intensity": 67586.0,
+    "n_zone_hours": 24,
+    "n_zones": 1,
+    "peak_hours": [
+      8,
+      4,
+      5,
+      7
+    ]
+  },
+  "61": {
+    "label": "Brooklyn \u2013 Coney Island (PM peak)",
+    "area_key": "Brooklyn \u2013 Coney Island",
+    "top_zones": [
+      "Coney Island"
+    ],
+    "borough_area": "Brooklyn area",
+    "time_window": "PM peak",
+    "total_intensity": 58773.0,
+    "n_zone_hours": 24,
+    "n_zones": 1,
+    "peak_hours": [
+      17,
+      22,
+      21,
+      16
+    ]
+  },
+  "62": {
+    "label": "Jamaica / Hillside (Queens) \u2013 Briarwood/Jamaica Hills (AM peak)",
+    "area_key": "Jamaica / Hillside (Queens) \u2013 Briarwood/Jamaica Hills",
+    "top_zones": [
+      "Briarwood/Jamaica Hills"
+    ],
+    "borough_area": "Queens area",
+    "time_window": "AM peak",
+    "total_intensity": 48149.0,
+    "n_zone_hours": 24,
+    "n_zones": 1,
+    "peak_hours": [
+      8,
+      7,
+      9,
+      14
+    ]
+  },
+  "63": {
+    "label": "Queens \u2013 Rego Park (PM peak)",
+    "area_key": "Queens \u2013 Rego Park",
+    "top_zones": [
+      "Rego Park"
+    ],
+    "borough_area": "Queens area",
+    "time_window": "PM peak",
+    "total_intensity": 49650.0,
+    "n_zone_hours": 24,
+    "n_zones": 1,
+    "peak_hours": [
+      17,
+      18,
+      15,
+      14
+    ]
+  },
+  "64": {
+    "label": "Brooklyn \u2013 Homecrest (AM peak)",
+    "area_key": "Brooklyn \u2013 Homecrest",
+    "top_zones": [
+      "Homecrest"
+    ],
+    "borough_area": "Brooklyn area",
+    "time_window": "AM peak",
+    "total_intensity": 50143.0,
+    "n_zone_hours": 24,
+    "n_zones": 1,
+    "peak_hours": [
+      17,
+      8,
+      9,
+      14
+    ]
+  },
+  "65": {
+    "label": "Brooklyn \u2013 Bensonhurst East (AM peak)",
+    "area_key": "Brooklyn \u2013 Bensonhurst East",
+    "top_zones": [
+      "Bensonhurst East"
+    ],
+    "borough_area": "Brooklyn area",
+    "time_window": "AM peak",
+    "total_intensity": 47919.0,
+    "n_zone_hours": 24,
+    "n_zones": 1,
+    "peak_hours": [
+      8,
+      9,
+      17,
+      14
+    ]
+  },
+  "66": {
+    "label": "LaGuardia (Queens) \u2013 East Elmhurst (AM peak)",
+    "area_key": "LaGuardia (Queens) \u2013 East Elmhurst",
+    "top_zones": [
+      "East Elmhurst"
+    ],
+    "borough_area": "Queens area",
+    "time_window": "AM peak",
+    "total_intensity": 49909.0,
+    "n_zone_hours": 24,
+    "n_zones": 1,
+    "peak_hours": [
+      8,
+      7,
+      14,
+      17
+    ]
+  },
+  "67": {
+    "label": "Queens \u2013 Glendale (PM peak)",
+    "area_key": "Queens \u2013 Glendale",
+    "top_zones": [
+      "Glendale",
+      "Forest Park/Highland Park"
+    ],
+    "borough_area": "Queens area",
+    "time_window": "PM peak",
+    "total_intensity": 51520.0,
+    "n_zone_hours": 48,
+    "n_zones": 2,
+    "peak_hours": [
+      17,
+      8,
+      18,
+      14
+    ]
+  },
+  "68": {
+    "label": "Brooklyn \u2013 Madison (AM peak)",
+    "area_key": "Brooklyn \u2013 Madison",
+    "top_zones": [
+      "Madison"
+    ],
+    "borough_area": "Brooklyn area",
+    "time_window": "AM peak",
+    "total_intensity": 45067.0,
+    "n_zone_hours": 24,
+    "n_zones": 1,
+    "peak_hours": [
+      8,
+      17,
+      14,
+      9
+    ]
+  },
+  "69": {
+    "label": "Queens \u2013 Far Rockaway (AM peak)",
+    "area_key": "Queens \u2013 Far Rockaway",
+    "top_zones": [
+      "Far Rockaway"
+    ],
+    "borough_area": "Queens area",
+    "time_window": "AM peak",
+    "total_intensity": 40762.0,
+    "n_zone_hours": 24,
+    "n_zones": 1,
+    "peak_hours": [
+      8,
+      9,
+      7,
+      15
+    ]
+  },
+  "70": {
+    "label": "Queens \u2013 Middle Village (AM peak)",
+    "area_key": "Queens \u2013 Middle Village",
+    "top_zones": [
+      "Middle Village"
+    ],
+    "borough_area": "Queens area",
+    "time_window": "AM peak",
+    "total_intensity": 43114.0,
+    "n_zone_hours": 24,
+    "n_zones": 1,
+    "peak_hours": [
+      8,
+      9,
+      17,
+      7
+    ]
+  },
+  "71": {
+    "label": "Jamaica / Hillside (Queens) \u2013 Hillcrest/Pomonok (PM peak)",
+    "area_key": "Jamaica / Hillside (Queens) \u2013 Hillcrest/Pomonok",
+    "top_zones": [
+      "Hillcrest/Pomonok"
+    ],
+    "borough_area": "Queens area",
+    "time_window": "PM peak",
+    "total_intensity": 39404.0,
+    "n_zone_hours": 24,
+    "n_zones": 1,
+    "peak_hours": [
+      16,
+      8,
+      15,
+      11
+    ]
+  },
+  "72": {
+    "label": "Queens \u2013 Springfield Gardens North (AM peak)",
+    "area_key": "Queens \u2013 Springfield Gardens North",
+    "top_zones": [
+      "Springfield Gardens North"
+    ],
+    "borough_area": "Queens area",
+    "time_window": "AM peak",
+    "total_intensity": 43871.0,
+    "n_zone_hours": 24,
+    "n_zones": 1,
+    "peak_hours": [
+      8,
+      7,
+      14,
+      15
+    ]
+  },
+  "73": {
+    "label": "Queens \u2013 Kew Gardens (PM peak)",
+    "area_key": "Queens \u2013 Kew Gardens",
+    "top_zones": [
+      "Kew Gardens"
+    ],
+    "borough_area": "Queens area",
+    "time_window": "PM peak",
+    "total_intensity": 43288.0,
+    "n_zone_hours": 24,
+    "n_zones": 1,
+    "peak_hours": [
+      17,
+      8,
+      18,
+      16
+    ]
+  },
+  "74": {
+    "label": "Corona & Jackson Heights (Queens) \u2013 Elmhurst/Maspeth (AM peak)",
+    "area_key": "Corona & Jackson Heights (Queens) \u2013 Elmhurst/Maspeth",
+    "top_zones": [
+      "Elmhurst/Maspeth"
+    ],
+    "borough_area": "Queens area",
+    "time_window": "AM peak",
+    "total_intensity": 43651.0,
+    "n_zone_hours": 24,
+    "n_zones": 1,
+    "peak_hours": [
+      8,
+      9,
+      7,
+      10
+    ]
+  },
+  "75": {
+    "label": "Brooklyn \u2013 Sunset Park East (PM peak)",
+    "area_key": "Brooklyn \u2013 Sunset Park East",
+    "top_zones": [
+      "Sunset Park East"
+    ],
+    "borough_area": "Brooklyn area",
+    "time_window": "PM peak",
+    "total_intensity": 46767.0,
+    "n_zone_hours": 24,
+    "n_zones": 1,
+    "peak_hours": [
+      8,
+      15,
+      14,
+      17
+    ]
+  },
+  "76": {
+    "label": "Staten Island \u2013 Saint George/New Brighton (PM peak)",
+    "area_key": "Staten Island \u2013 Saint George/New Brighton",
+    "top_zones": [
+      "Saint George/New Brighton",
+      "West Brighton"
+    ],
+    "borough_area": "Staten Island area",
+    "time_window": "PM peak",
+    "total_intensity": 55432.0,
+    "n_zone_hours": 48,
+    "n_zones": 2,
+    "peak_hours": [
+      17,
+      16,
+      8,
+      15
+    ]
+  },
+  "77": {
+    "label": "The Bronx \u2013 Allerton/Pelham Gardens (AM peak)",
+    "area_key": "The Bronx \u2013 Allerton/Pelham Gardens",
+    "top_zones": [
+      "Allerton/Pelham Gardens"
+    ],
+    "borough_area": "The Bronx area",
+    "time_window": "AM peak",
+    "total_intensity": 42504.0,
+    "n_zone_hours": 24,
+    "n_zones": 1,
+    "peak_hours": [
+      15,
+      8,
+      14,
+      7
+    ]
+  },
+  "78": {
+    "label": "The Bronx \u2013 Riverdale/North Riverdale/Fieldston (PM peak)",
+    "area_key": "The Bronx \u2013 Riverdale/North Riverdale/Fieldston",
+    "top_zones": [
+      "Riverdale/North Riverdale/Fieldston"
+    ],
+    "borough_area": "The Bronx area",
+    "time_window": "PM peak",
+    "total_intensity": 37811.0,
+    "n_zone_hours": 24,
+    "n_zones": 1,
+    "peak_hours": [
+      8,
+      15,
+      17,
+      16
+    ]
+  },
+  "79": {
+    "label": "Queens \u2013 Laurelton (AM peak)",
+    "area_key": "Queens \u2013 Laurelton",
+    "top_zones": [
+      "Laurelton"
+    ],
+    "borough_area": "Queens area",
+    "time_window": "AM peak",
+    "total_intensity": 38134.0,
+    "n_zone_hours": 24,
+    "n_zones": 1,
+    "peak_hours": [
+      8,
+      14,
+      9,
+      15
+    ]
+  },
+  "80": {
+    "label": "Queens \u2013 Springfield Gardens South (AM peak)",
+    "area_key": "Queens \u2013 Springfield Gardens South",
+    "top_zones": [
+      "Springfield Gardens South"
+    ],
+    "borough_area": "Queens area",
+    "time_window": "AM peak",
+    "total_intensity": 37885.0,
+    "n_zone_hours": 24,
+    "n_zones": 1,
+    "peak_hours": [
+      8,
+      7,
+      14,
+      9
+    ]
+  },
+  "81": {
+    "label": "Brooklyn \u2013 Brighton Beach (PM peak)",
+    "area_key": "Brooklyn \u2013 Brighton Beach",
+    "top_zones": [
+      "Brighton Beach"
+    ],
+    "borough_area": "Brooklyn area",
+    "time_window": "PM peak",
+    "total_intensity": 36313.0,
+    "n_zone_hours": 24,
+    "n_zones": 1,
+    "peak_hours": [
+      17,
+      16,
+      14,
+      18
+    ]
+  },
+  "82": {
+    "label": "Brooklyn \u2013 Kensington (AM peak)",
+    "area_key": "Brooklyn \u2013 Kensington",
+    "top_zones": [
+      "Kensington"
+    ],
+    "borough_area": "Brooklyn area",
+    "time_window": "AM peak",
+    "total_intensity": 37334.0,
+    "n_zone_hours": 24,
+    "n_zones": 1,
+    "peak_hours": [
+      8,
+      9,
+      10,
+      14
+    ]
+  },
+  "83": {
+    "label": "Queens \u2013 Murray Hill-Queens (AM peak)",
+    "area_key": "Queens \u2013 Murray Hill-Queens",
+    "top_zones": [
+      "Murray Hill-Queens"
+    ],
+    "borough_area": "Queens area",
+    "time_window": "AM peak",
+    "total_intensity": 37617.0,
+    "n_zone_hours": 24,
+    "n_zones": 1,
+    "peak_hours": [
+      8,
+      9,
+      7,
+      15
+    ]
+  },
+  "84": {
+    "label": "Queens \u2013 Kew Gardens Hills (AM peak)",
+    "area_key": "Queens \u2013 Kew Gardens Hills",
+    "top_zones": [
+      "Kew Gardens Hills"
+    ],
+    "borough_area": "Queens area",
+    "time_window": "AM peak",
+    "total_intensity": 33186.0,
+    "n_zone_hours": 24,
+    "n_zones": 1,
+    "peak_hours": [
+      8,
+      9,
+      14,
+      15
+    ]
+  },
+  "85": {
+    "label": "Brooklyn \u2013 Dyker Heights (AM peak)",
+    "area_key": "Brooklyn \u2013 Dyker Heights",
+    "top_zones": [
+      "Dyker Heights"
+    ],
+    "borough_area": "Brooklyn area",
+    "time_window": "AM peak",
+    "total_intensity": 35261.0,
+    "n_zone_hours": 24,
+    "n_zones": 1,
+    "peak_hours": [
+      8,
+      9,
+      7,
+      18
+    ]
+  },
+  "86": {
+    "label": "Queens \u2013 Rosedale (AM peak)",
+    "area_key": "Queens \u2013 Rosedale",
+    "top_zones": [
+      "Rosedale"
+    ],
+    "borough_area": "Queens area",
+    "time_window": "AM peak",
+    "total_intensity": 37915.0,
+    "n_zone_hours": 24,
+    "n_zones": 1,
+    "peak_hours": [
+      7,
+      8,
+      17,
+      15
+    ]
+  },
+  "87": {
+    "label": "Queens \u2013 Bayside (PM peak)",
+    "area_key": "Queens \u2013 Bayside",
+    "top_zones": [
+      "Bayside"
+    ],
+    "borough_area": "Queens area",
+    "time_window": "PM peak",
+    "total_intensity": 38249.0,
+    "n_zone_hours": 24,
+    "n_zones": 1,
+    "peak_hours": [
+      18,
+      17,
+      15,
+      8
+    ]
+  },
+  "88": {
+    "label": "Jamaica / Hillside (Queens) \u2013 Jamaica Estates (AM peak)",
+    "area_key": "Jamaica / Hillside (Queens) \u2013 Jamaica Estates",
+    "top_zones": [
+      "Jamaica Estates"
+    ],
+    "borough_area": "Queens area",
+    "time_window": "AM peak",
+    "total_intensity": 29823.0,
+    "n_zone_hours": 24,
+    "n_zones": 1,
+    "peak_hours": [
+      8,
+      9,
+      15,
+      14
+    ]
+  },
+  "89": {
+    "label": "Queens \u2013 Ozone Park (PM peak)",
+    "area_key": "Queens \u2013 Ozone Park",
+    "top_zones": [
+      "Ozone Park"
+    ],
+    "borough_area": "Queens area",
+    "time_window": "PM peak",
+    "total_intensity": 33437.0,
+    "n_zone_hours": 24,
+    "n_zones": 1,
+    "peak_hours": [
+      8,
+      14,
+      18,
+      17
+    ]
+  },
+  "90": {
+    "label": "Queens \u2013 Hammels/Arverne (AM peak)",
+    "area_key": "Queens \u2013 Hammels/Arverne",
+    "top_zones": [
+      "Hammels/Arverne"
+    ],
+    "borough_area": "Queens area",
+    "time_window": "AM peak",
+    "total_intensity": 32321.0,
+    "n_zone_hours": 24,
+    "n_zones": 1,
+    "peak_hours": [
+      8,
+      9,
+      17,
+      18
+    ]
+  },
+  "91": {
+    "label": "Staten Island \u2013 Bloomfield/Emerson Hill (PM peak)",
+    "area_key": "Staten Island \u2013 Bloomfield/Emerson Hill",
+    "top_zones": [
+      "Bloomfield/Emerson Hill"
+    ],
+    "borough_area": "Staten Island area",
+    "time_window": "PM peak",
+    "total_intensity": 27790.0,
+    "n_zone_hours": 24,
+    "n_zones": 1,
+    "peak_hours": [
+      17,
+      16,
+      15,
+      14
+    ]
+  },
+  "92": {
+    "label": "Brooklyn \u2013 Windsor Terrace (PM peak)",
+    "area_key": "Brooklyn \u2013 Windsor Terrace",
+    "top_zones": [
+      "Windsor Terrace",
+      "Prospect Park",
+      "Green-Wood Cemetery"
+    ],
+    "borough_area": "Brooklyn area",
+    "time_window": "PM peak",
+    "total_intensity": 46703.0,
+    "n_zone_hours": 72,
+    "n_zones": 3,
+    "peak_hours": [
+      17,
+      18,
+      21,
+      20
+    ]
+  },
+  "93": {
+    "label": "Brooklyn \u2013 Gravesend (AM peak)",
+    "area_key": "Brooklyn \u2013 Gravesend",
+    "top_zones": [
+      "Gravesend"
+    ],
+    "borough_area": "Brooklyn area",
+    "time_window": "AM peak",
+    "total_intensity": 26931.0,
+    "n_zone_hours": 24,
+    "n_zones": 1,
+    "peak_hours": [
+      8,
+      9,
+      14,
+      7
+    ]
+  },
+  "94": {
+    "label": "Queens \u2013 College Point (AM peak)",
+    "area_key": "Queens \u2013 College Point",
+    "top_zones": [
+      "College Point"
+    ],
+    "borough_area": "Queens area",
+    "time_window": "AM peak",
+    "total_intensity": 29341.0,
+    "n_zone_hours": 24,
+    "n_zones": 1,
+    "peak_hours": [
+      8,
+      7,
+      9,
+      10
+    ]
+  },
+  "95": {
+    "label": "Queens \u2013 Howard Beach (PM peak)",
+    "area_key": "Queens \u2013 Howard Beach",
+    "top_zones": [
+      "Howard Beach"
+    ],
+    "borough_area": "Queens area",
+    "time_window": "PM peak",
+    "total_intensity": 31207.0,
+    "n_zone_hours": 24,
+    "n_zones": 1,
+    "peak_hours": [
+      15,
+      17,
+      14,
+      16
+    ]
+  },
+  "96": {
+    "label": "Staten Island \u2013 Mariners Harbor (AM peak)",
+    "area_key": "Staten Island \u2013 Mariners Harbor",
+    "top_zones": [
+      "Mariners Harbor"
+    ],
+    "borough_area": "Staten Island area",
+    "time_window": "AM peak",
+    "total_intensity": 26175.0,
+    "n_zone_hours": 24,
+    "n_zones": 1,
+    "peak_hours": [
+      8,
+      17,
+      14,
+      7
+    ]
+  },
+  "97": {
+    "label": "Staten Island \u2013 Stapleton (AM peak)",
+    "area_key": "Staten Island \u2013 Stapleton",
+    "top_zones": [
+      "Stapleton",
+      "Grymes Hill/Clifton"
+    ],
+    "borough_area": "Staten Island area",
+    "time_window": "AM peak",
+    "total_intensity": 42294.0,
+    "n_zone_hours": 48,
+    "n_zones": 2,
+    "peak_hours": [
+      8,
+      7,
+      9,
+      14
+    ]
+  },
+  "98": {
+    "label": "Queens \u2013 Hollis (AM peak)",
+    "area_key": "Queens \u2013 Hollis",
+    "top_zones": [
+      "Hollis"
+    ],
+    "borough_area": "Queens area",
+    "time_window": "AM peak",
+    "total_intensity": 23466.0,
+    "n_zone_hours": 24,
+    "n_zones": 1,
+    "peak_hours": [
+      8,
+      7,
+      9,
+      14
+    ]
+  },
+  "99": {
+    "label": "Brooklyn \u2013 Bath Beach (AM peak)",
+    "area_key": "Brooklyn \u2013 Bath Beach",
+    "top_zones": [
+      "Bath Beach"
+    ],
+    "borough_area": "Brooklyn area",
+    "time_window": "AM peak",
+    "total_intensity": 21371.0,
+    "n_zone_hours": 24,
+    "n_zones": 1,
+    "peak_hours": [
+      8,
+      9,
+      7,
+      10
+    ]
+  },
+  "100": {
+    "label": "Brooklyn \u2013 Starrett City (AM peak)",
+    "area_key": "Brooklyn \u2013 Starrett City",
+    "top_zones": [
+      "Starrett City"
+    ],
+    "borough_area": "Brooklyn area",
+    "time_window": "AM peak",
+    "total_intensity": 23988.0,
+    "n_zone_hours": 24,
+    "n_zones": 1,
+    "peak_hours": [
+      8,
+      7,
+      12,
+      16
+    ]
+  },
+  "101": {
+    "label": "Staten Island \u2013 Heartland Village/Todt Hill (PM peak)",
+    "area_key": "Staten Island \u2013 Heartland Village/Todt Hill",
+    "top_zones": [
+      "Heartland Village/Todt Hill"
+    ],
+    "borough_area": "Staten Island area",
+    "time_window": "PM peak",
+    "total_intensity": 20533.0,
+    "n_zone_hours": 24,
+    "n_zones": 1,
+    "peak_hours": [
+      17,
+      18,
+      16,
+      15
+    ]
+  },
+  "102": {
+    "label": "Queens \u2013 Whitestone (PM peak)",
+    "area_key": "Queens \u2013 Whitestone",
+    "top_zones": [
+      "Whitestone"
+    ],
+    "borough_area": "Queens area",
+    "time_window": "PM peak",
+    "total_intensity": 25347.0,
+    "n_zone_hours": 24,
+    "n_zones": 1,
+    "peak_hours": [
+      17,
+      18,
+      15,
+      16
+    ]
+  },
+  "103": {
+    "label": "The Bronx \u2013 Pelham Bay (AM peak)",
+    "area_key": "The Bronx \u2013 Pelham Bay",
+    "top_zones": [
+      "Pelham Bay"
+    ],
+    "borough_area": "The Bronx area",
+    "time_window": "AM peak",
+    "total_intensity": 26029.0,
+    "n_zone_hours": 24,
+    "n_zones": 1,
+    "peak_hours": [
+      8,
+      9,
+      15,
+      17
+    ]
+  },
+  "104": {
+    "label": "Queens \u2013 Cambria Heights (AM peak)",
+    "area_key": "Queens \u2013 Cambria Heights",
+    "top_zones": [
+      "Cambria Heights"
+    ],
+    "borough_area": "Queens area",
+    "time_window": "AM peak",
+    "total_intensity": 23682.0,
+    "n_zone_hours": 24,
+    "n_zones": 1,
+    "peak_hours": [
+      8,
+      14,
+      15,
+      9
+    ]
+  },
+  "105": {
+    "label": "Queens \u2013 Queensboro Hill (AM peak)",
+    "area_key": "Queens \u2013 Queensboro Hill",
+    "top_zones": [
+      "Queensboro Hill"
+    ],
+    "borough_area": "Queens area",
+    "time_window": "AM peak",
+    "total_intensity": 25322.0,
+    "n_zone_hours": 24,
+    "n_zones": 1,
+    "peak_hours": [
+      14,
+      8,
+      16,
+      7
+    ]
+  },
+  "106": {
+    "label": "Brooklyn \u2013 Manhattan Beach (PM peak)",
+    "area_key": "Brooklyn \u2013 Manhattan Beach",
+    "top_zones": [
+      "Manhattan Beach"
+    ],
+    "borough_area": "Brooklyn area",
+    "time_window": "PM peak",
+    "total_intensity": 22372.0,
+    "n_zone_hours": 24,
+    "n_zones": 1,
+    "peak_hours": [
+      17,
+      23,
+      22,
+      16
+    ]
+  },
+  "107": {
+    "label": "Queens \u2013 East Flushing (AM peak)",
+    "area_key": "Queens \u2013 East Flushing",
+    "top_zones": [
+      "East Flushing"
+    ],
+    "borough_area": "Queens area",
+    "time_window": "AM peak",
+    "total_intensity": 19674.0,
+    "n_zone_hours": 24,
+    "n_zones": 1,
+    "peak_hours": [
+      8,
+      7,
+      9,
+      15
+    ]
+  },
+  "108": {
+    "label": "Queens \u2013 Rockaway Park (PM peak)",
+    "area_key": "Queens \u2013 Rockaway Park",
+    "top_zones": [
+      "Rockaway Park"
+    ],
+    "borough_area": "Queens area",
+    "time_window": "PM peak",
+    "total_intensity": 18265.0,
+    "n_zone_hours": 24,
+    "n_zones": 1,
+    "peak_hours": [
+      18,
+      17,
+      19,
+      16
+    ]
+  },
+  "109": {
+    "label": "Queens \u2013 Auburndale (Midday)",
+    "area_key": "Queens \u2013 Auburndale",
+    "top_zones": [
+      "Auburndale"
+    ],
+    "borough_area": "Queens area",
+    "time_window": "Midday",
+    "total_intensity": 17535.0,
+    "n_zone_hours": 24,
+    "n_zones": 1,
+    "peak_hours": [
+      8,
+      14,
+      15,
+      10
+    ]
+  },
+  "110": {
+    "label": "Queens \u2013 Bellerose (AM peak)",
+    "area_key": "Queens \u2013 Bellerose",
+    "top_zones": [
+      "Bellerose"
+    ],
+    "borough_area": "Queens area",
+    "time_window": "AM peak",
+    "total_intensity": 17417.0,
+    "n_zone_hours": 24,
+    "n_zones": 1,
+    "peak_hours": [
+      8,
+      15,
+      7,
+      14
+    ]
+  },
+  "111": {
+    "label": "Queens \u2013 Fresh Meadows (PM peak)",
+    "area_key": "Queens \u2013 Fresh Meadows",
+    "top_zones": [
+      "Fresh Meadows"
+    ],
+    "borough_area": "Queens area",
+    "time_window": "PM peak",
+    "total_intensity": 18044.0,
+    "n_zone_hours": 24,
+    "n_zones": 1,
+    "peak_hours": [
+      17,
+      15,
+      14,
+      16
+    ]
+  },
+  "112": {
+    "label": "Queens \u2013 Glen Oaks (PM peak)",
+    "area_key": "Queens \u2013 Glen Oaks",
+    "top_zones": [
+      "Glen Oaks"
+    ],
+    "borough_area": "Queens area",
+    "time_window": "PM peak",
+    "total_intensity": 16662.0,
+    "n_zone_hours": 24,
+    "n_zones": 1,
+    "peak_hours": [
+      16,
+      8,
+      14,
+      15
+    ]
+  },
+  "113": {
+    "label": "Queens \u2013 Oakland Gardens (AM peak)",
+    "area_key": "Queens \u2013 Oakland Gardens",
+    "top_zones": [
+      "Oakland Gardens"
+    ],
+    "borough_area": "Queens area",
+    "time_window": "AM peak",
+    "total_intensity": 14484.0,
+    "n_zone_hours": 24,
+    "n_zones": 1,
+    "peak_hours": [
+      8,
+      9,
+      14,
+      13
+    ]
+  },
+  "114": {
+    "label": "Staten Island \u2013 South Beach/Dongan Hills (PM peak)",
+    "area_key": "Staten Island \u2013 South Beach/Dongan Hills",
+    "top_zones": [
+      "South Beach/Dongan Hills"
+    ],
+    "borough_area": "Staten Island area",
+    "time_window": "PM peak",
+    "total_intensity": 16173.0,
+    "n_zone_hours": 24,
+    "n_zones": 1,
+    "peak_hours": [
+      15,
+      16,
+      14,
+      8
+    ]
+  },
+  "115": {
+    "label": "Staten Island \u2013 Westerleigh (PM peak)",
+    "area_key": "Staten Island \u2013 Westerleigh",
+    "top_zones": [
+      "Westerleigh"
+    ],
+    "borough_area": "Staten Island area",
+    "time_window": "PM peak",
+    "total_intensity": 15345.0,
+    "n_zone_hours": 24,
+    "n_zones": 1,
+    "peak_hours": [
+      16,
+      15,
+      14,
+      17
+    ]
+  },
+  "116": {
+    "label": "Staten Island \u2013 Port Richmond (PM peak)",
+    "area_key": "Staten Island \u2013 Port Richmond",
+    "top_zones": [
+      "Port Richmond"
+    ],
+    "borough_area": "Staten Island area",
+    "time_window": "PM peak",
+    "total_intensity": 14369.0,
+    "n_zone_hours": 24,
+    "n_zones": 1,
+    "peak_hours": [
+      17,
+      8,
+      14,
+      15
+    ]
+  },
+  "117": {
+    "label": "Queens \u2013 Douglaston (PM peak)",
+    "area_key": "Queens \u2013 Douglaston",
+    "top_zones": [
+      "Douglaston"
+    ],
+    "borough_area": "Queens area",
+    "time_window": "PM peak",
+    "total_intensity": 13456.0,
+    "n_zone_hours": 24,
+    "n_zones": 1,
+    "peak_hours": [
+      15,
+      16,
+      17,
+      18
+    ]
+  },
+  "118": {
+    "label": "Queens \u2013 Bay Terrace/Fort Totten (PM peak)",
+    "area_key": "Queens \u2013 Bay Terrace/Fort Totten",
+    "top_zones": [
+      "Bay Terrace/Fort Totten"
+    ],
+    "borough_area": "Queens area",
+    "time_window": "PM peak",
+    "total_intensity": 14538.0,
+    "n_zone_hours": 24,
+    "n_zones": 1,
+    "peak_hours": [
+      17,
+      16,
+      15,
+      14
+    ]
+  },
+  "119": {
+    "label": "The Bronx \u2013 Van Cortlandt Park (Evening)",
+    "area_key": "The Bronx \u2013 Van Cortlandt Park",
+    "top_zones": [
+      "Van Cortlandt Park"
+    ],
+    "borough_area": "The Bronx area",
+    "time_window": "Evening",
+    "total_intensity": 13975.0,
+    "n_zone_hours": 24,
+    "n_zones": 1,
+    "peak_hours": [
+      22,
+      21,
+      20,
+      17
+    ]
+  },
+  "120": {
+    "label": "The Bronx \u2013 Pelham Bay Park (PM peak)",
+    "area_key": "The Bronx \u2013 Pelham Bay Park",
+    "top_zones": [
+      "Pelham Bay Park"
+    ],
+    "borough_area": "The Bronx area",
+    "time_window": "PM peak",
+    "total_intensity": 8265.0,
+    "n_zone_hours": 24,
+    "n_zones": 1,
+    "peak_hours": [
+      18,
+      19,
+      17,
+      16
+    ]
+  },
+  "121": {
+    "label": "Staten Island \u2013 Great Kills (AM peak)",
+    "area_key": "Staten Island \u2013 Great Kills",
+    "top_zones": [
+      "Great Kills"
+    ],
+    "borough_area": "Staten Island area",
+    "time_window": "AM peak",
+    "total_intensity": 13729.0,
+    "n_zone_hours": 24,
+    "n_zones": 1,
+    "peak_hours": [
+      14,
+      8,
+      9,
+      12
+    ]
+  },
+  "122": {
+    "label": "Staten Island \u2013 New Dorp/Midland Beach (PM peak)",
+    "area_key": "Staten Island \u2013 New Dorp/Midland Beach",
+    "top_zones": [
+      "New Dorp/Midland Beach"
+    ],
+    "borough_area": "Staten Island area",
+    "time_window": "PM peak",
+    "total_intensity": 11976.0,
+    "n_zone_hours": 24,
+    "n_zones": 1,
+    "peak_hours": [
+      14,
+      16,
+      15,
+      18
+    ]
+  },
+  "123": {
+    "label": "Staten Island \u2013 Arrochar/Fort Wadsworth (AM peak)",
+    "area_key": "Staten Island \u2013 Arrochar/Fort Wadsworth",
+    "top_zones": [
+      "Arrochar/Fort Wadsworth"
+    ],
+    "borough_area": "Staten Island area",
+    "time_window": "AM peak",
+    "total_intensity": 11221.0,
+    "n_zone_hours": 24,
+    "n_zones": 1,
+    "peak_hours": [
+      8,
+      11,
+      9,
+      14
+    ]
+  },
+  "124": {
+    "label": "Staten Island \u2013 Charleston/Tottenville (PM peak)",
+    "area_key": "Staten Island \u2013 Charleston/Tottenville",
+    "top_zones": [
+      "Charleston/Tottenville"
+    ],
+    "borough_area": "Staten Island area",
+    "time_window": "PM peak",
+    "total_intensity": 8485.0,
+    "n_zone_hours": 24,
+    "n_zones": 1,
+    "peak_hours": [
+      16,
+      17,
+      14,
+      15
+    ]
+  },
+  "125": {
+    "label": "Staten Island \u2013 Eltingville/Annadale/Prince's Bay (PM peak)",
+    "area_key": "Staten Island \u2013 Eltingville/Annadale/Prince's Bay",
+    "top_zones": [
+      "Eltingville/Annadale/Prince's Bay"
+    ],
+    "borough_area": "Staten Island area",
+    "time_window": "PM peak",
+    "total_intensity": 9135.0,
+    "n_zone_hours": 24,
+    "n_zones": 1,
+    "peak_hours": [
+      14,
+      15,
+      18,
+      19
+    ]
+  },
+  "126": {
+    "label": "The Bronx \u2013 Country Club (AM peak)",
+    "area_key": "The Bronx \u2013 Country Club",
+    "top_zones": [
+      "Country Club"
+    ],
+    "borough_area": "The Bronx area",
+    "time_window": "AM peak",
+    "total_intensity": 6880.0,
+    "n_zone_hours": 24,
+    "n_zones": 1,
+    "peak_hours": [
+      7,
+      8,
+      9,
+      14
+    ]
+  },
+  "127": {
+    "label": "The Bronx \u2013 City Island (Evening)",
+    "area_key": "The Bronx \u2013 City Island",
+    "top_zones": [
+      "City Island"
+    ],
+    "borough_area": "The Bronx area",
+    "time_window": "Evening",
+    "total_intensity": 5436.0,
+    "n_zone_hours": 24,
+    "n_zones": 1,
+    "peak_hours": [
+      21,
+      22,
+      20,
+      17
+    ]
+  },
+  "128": {
+    "label": "Staten Island \u2013 Arden Heights (AM peak)",
+    "area_key": "Staten Island \u2013 Arden Heights",
+    "top_zones": [
+      "Arden Heights"
+    ],
+    "borough_area": "Staten Island area",
+    "time_window": "AM peak",
+    "total_intensity": 6217.0,
+    "n_zone_hours": 24,
+    "n_zones": 1,
+    "peak_hours": [
+      8,
+      7,
+      10,
+      9
+    ]
+  },
+  "129": {
+    "label": "Staten Island \u2013 Oakwood (Midday)",
+    "area_key": "Staten Island \u2013 Oakwood",
+    "top_zones": [
+      "Oakwood"
+    ],
+    "borough_area": "Staten Island area",
+    "time_window": "Midday",
+    "total_intensity": 6640.0,
+    "n_zone_hours": 24,
+    "n_zones": 1,
+    "peak_hours": [
+      8,
+      14,
+      15,
+      12
+    ]
+  },
+  "130": {
+    "label": "Queens \u2013 Breezy Point/Fort Tilden/Riis Beach (PM peak)",
+    "area_key": "Queens \u2013 Breezy Point/Fort Tilden/Riis Beach",
+    "top_zones": [
+      "Breezy Point/Fort Tilden/Riis Beach"
+    ],
+    "borough_area": "Queens area",
+    "time_window": "PM peak",
+    "total_intensity": 3286.0,
+    "n_zone_hours": 24,
+    "n_zones": 1,
+    "peak_hours": [
+      17,
+      16,
+      18,
+      19
+    ]
+  },
+  "131": {
+    "label": "Manhattan \u2013 Randalls Island (Midday)",
+    "area_key": "Manhattan \u2013 Randalls Island",
+    "top_zones": [
+      "Randalls Island"
+    ],
+    "borough_area": "Manhattan area",
+    "time_window": "Midday",
+    "total_intensity": 4365.0,
+    "n_zone_hours": 24,
+    "n_zones": 1,
+    "peak_hours": [
+      15,
+      16,
+      12,
+      13
+    ]
+  },
+  "132": {
+    "label": "Queens \u2013 Saint Michaels Cemetery/Woodside (Late night)",
+    "area_key": "Queens \u2013 Saint Michaels Cemetery/Woodside",
+    "top_zones": [
+      "Saint Michaels Cemetery/Woodside"
+    ],
+    "borough_area": "Queens area",
+    "time_window": "Late night",
+    "total_intensity": 3459.0,
+    "n_zone_hours": 24,
+    "n_zones": 1,
+    "peak_hours": [
+      4,
+      11,
+      13,
+      5
+    ]
+  },
+  "133": {
+    "label": "Staten Island \u2013 Rossville/Woodrow (AM peak)",
+    "area_key": "Staten Island \u2013 Rossville/Woodrow",
+    "top_zones": [
+      "Rossville/Woodrow"
+    ],
+    "borough_area": "Staten Island area",
+    "time_window": "AM peak",
+    "total_intensity": 5468.0,
+    "n_zone_hours": 24,
+    "n_zones": 1,
+    "peak_hours": [
+      8,
+      9,
+      15,
+      16
+    ]
+  },
+  "134": {
+    "label": "Brooklyn \u2013 Marine Park/Floyd Bennett Field (PM peak)",
+    "area_key": "Brooklyn \u2013 Marine Park/Floyd Bennett Field",
+    "top_zones": [
+      "Marine Park/Floyd Bennett Field"
+    ],
+    "borough_area": "Brooklyn area",
+    "time_window": "PM peak",
+    "total_intensity": 2700.0,
+    "n_zone_hours": 24,
+    "n_zones": 1,
+    "peak_hours": [
+      19,
+      17,
+      18,
+      20
+    ]
+  },
+  "135": {
+    "label": "Queens \u2013 Broad Channel (Midday)",
+    "area_key": "Queens \u2013 Broad Channel",
+    "top_zones": [
+      "Broad Channel"
+    ],
+    "borough_area": "Queens area",
+    "time_window": "Midday",
+    "total_intensity": 1760.0,
+    "n_zone_hours": 24,
+    "n_zones": 1,
+    "peak_hours": [
+      12,
+      21,
+      22,
+      13
+    ]
+  },
+  "136": {
+    "label": "Staten Island \u2013 Freshkills Park (PM peak)",
+    "area_key": "Staten Island \u2013 Freshkills Park",
+    "top_zones": [
+      "Freshkills Park"
+    ],
+    "borough_area": "Staten Island area",
+    "time_window": "PM peak",
+    "total_intensity": 378.0,
+    "n_zone_hours": 18,
+    "n_zones": 1,
+    "peak_hours": [
+      17,
+      15,
+      16,
+      23
+    ]
+  },
+  "137": {
+    "label": "Staten Island \u2013 Freshkills Park (Late night)",
+    "area_key": "Staten Island \u2013 Freshkills Park",
+    "top_zones": [
+      "Freshkills Park"
+    ],
+    "borough_area": "Staten Island area",
+    "time_window": "Late night",
+    "total_intensity": 79.0,
+    "n_zone_hours": 5,
+    "n_zones": 1,
+    "peak_hours": [
+      0,
+      3,
+      1,
+      2
+    ]
+  }
+}

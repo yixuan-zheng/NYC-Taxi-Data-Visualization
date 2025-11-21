@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>NYC Taxi — Hotspots + OD Flows</title>
+  <!-- External CSS -->
+  <link rel="stylesheet" href="css/main.css" />
+</head>
+
+<body>
+  <!-- shared hour -->
+  <div class="topbar">
+    <label for="hour">Hour</label>
+    <input id="hour" type="range" min="0" max="23" value="8" step="1" />
+    <span id="hourLabel">08:00</span>
+    <span class="hint">Drag the slider to change the hour — both maps update together.</span>
+    <div class="od-toggle" style="margin-left:auto; display:flex; gap:8px;">
+      <button class="od-view-btn is-active" data-view="od"
+        style="padding: 6px 12px; font-weight:600; cursor:pointer;">Traffic Map</button>
+      <button class="od-view-btn" data-view="cluster" style="padding: 6px 12px; font-weight:600; cursor:pointer;">Hourly
+        Trends</button>
+    </div>
+  </div>
+
+  <div class="layout">
+    <!-- LEFT: HOTSPOT MAP (spatiotemporal) -->
+    <div class="viz" id="hotViz">
+      <!-- Top panel: title + legend + borough filter -->
+      <div class="panel">
+        <!-- Top text block -->
+        <div>
+          <div class="panel-title">NYC Taxi Pulse: Demand Heatmap</div>
+          <div class="hint">
+            See where the action is. Brighter colors = more trips. Hover for details.
+          </div>
+          <!-- hotStats deleted as requested -->
+        </div>
+
+        <!-- Legend + borough filter on the same horizontal row -->
+        <div
+          style="display:flex;justify-content:space-between;align-items:flex-end;gap:12px;margin-top:4px;margin-bottom:4px;">
+          <!-- Trips/Hour legend (left) -->
+          <div class="legend-box" id="hotLegend">
+            <div class="legend-title">Trips/Hour</div>
+            <div class="legend-bar hot"></div>
+            <div class="legend-labels" style="display:none;">
+              <span id="legendStart">0</span>
+              <span id="legendMid">—</span>
+              <span id="legendEnd">—</span>
+            </div>
+            <div class="hint" id="legendNote">Scaled to selected dataset.</div>
+          </div>
+
+          <!-- Borough filter (right), vertically aligned with legend -->
+          <div style="display:flex;flex-direction:column;gap:4px;min-width:150px;align-items:flex-end;">
+            <label for="boroughFilter" style="font-size:12px;">Show zones in borough</label>
+            <select id="boroughFilter" style="max-width:160px">
+              <option value="__all__">All boroughs</option>
+              <option>Manhattan</option>
+              <option>Brooklyn</option>
+              <option>Queens</option>
+              <option>The Bronx</option>
+              <option>Staten Island</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Map card: uses all remaining height in this column -->
+      <div class="map-wrap" id="hotMap">
+        <svg id="hotSvg"></svg>
+        <div class="tooltip" id="hotTip"></div>
+      </div>
+    </div>
+
+    <!-- RIGHT: OD MAP -->
+    <div class="viz" id="odViz">
+      <div class="panel" style="position:relative;">
+        <div class="panel-title" id="odPanelTitle">City Flow: Origin-Destination Links</div>
+        <div class="hint" id="odPanelSubtitle" style="margin-bottom: 2px;">
+          Interactive flow map. Click a dot to reveal connections.<br>Click a destination to isolate the path. Tap empty
+          space to reset.
+        </div>
+
+        <div class="od-controls">
+          <div class="corridor-search">
+            <!-- From / To inputs + Show routes button -->
+            <div class="corridor-input">
+              <label for="corridorOrigin" style="font-size:12px;">From</label>
+              <input id="corridorOrigin" list="corridorOriginList" placeholder="e.g. Manhattan" />
+              <datalist id="corridorOriginList"></datalist>
+            </div>
+
+            <div class="corridor-input">
+              <label for="corridorDest" style="font-size:12px;">To</label>
+              <input id="corridorDest" list="corridorDestList" placeholder="e.g. Queens" />
+              <datalist id="corridorDestList"></datalist>
+            </div>
+
+            <button id="corridorGoBtn" style="margin-top:18px; font-size:12px;padding:3px 10px;
+                            border-radius:8px;border:1px solid rgba(148,163,184,.9);
+                            background:#ffffff;cursor:pointer;white-space:nowrap;">
+              Show routes
+            </button>
+          </div>
+
+          <!-- Flow legend on the right -->
+          <div style="margin-left:auto;">
+            <div class="legend-box" id="odLegend">
+              <div class="legend-title">Trip Volume</div>
+              <div class="legend-bar flow"></div>
+              <div class="legend-labels"><span>low</span><span>mid</span><span>high</span></div>
+              <div class="hint" id="odLegendNote">Scaled to selected zone &amp; hour.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- NEW: captions live *below* the controls row -->
+        <div id="odCaptions" class="od-captions">
+          <div class="hint" id="odSummary">No zone selected. Click a dot.</div>
+          <div class="hint" id="odDbg"></div>
+        </div>
+
+        <!-- Corridor filter (shows when applicable), just under controls row -->
+        <div class="hint" id="odCorridorControls" style="display:none; margin-top:2px;">
+          <button id="corridorBtn" style="display:none;font-size:12px;padding:3px 8px;border-radius:8px;
+                        border:1px solid rgba(148,163,184,.9);background:#ffffff;cursor:pointer;">
+            Show corridor routes
+          </button>
+          <select id="corridorFilter" style="display:none;margin-left:6px;font-size:12px;padding:2px 6px;
+                        border-radius:6px;border:1px solid rgba(148,163,184,.9);background:#ffffff;"></select>
+        </div>
+
+
+        <div class="hint" id="odDbg"></div>
+      </div>
+      <!-- view toggle target area -->
+      <div class="map-wrap" id="odMap">
+        <svg id="odSvg"></svg>
+        <div id="odTip" class="tooltip"></div>
+      </div>
+
+      <!-- second view: cluster time patterns (hidden by default) -->
+      <div class="cluster-view" id="clusterView" style="display:none;">
+        <div>
+          <div class="cluster-title" id="clusterDetailTitle">Cluster – Hourly Profile</div>
+        </div>
+        <div id="clusterDetail" class="cluster-chart"></div>
+        <div class="cluster-table-wrap">
+          <table class="cluster-table" id="clusterTable">
+            <thead>
+              <tr>
+                <th style="width:38px;"></th>
+                <th>Area</th>
+                <th style="text-align:right;">Total trips</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+        <div id="clusterTooltip" class="cluster-tooltip"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+  <!-- Order matters if you use globals: state first, then parts, then wiring -->
+  <script src="js/state.js"></script>
+  <script src="js/hotmap.js"></script>
+  <script src="js/odmap.js"></script>
+  <script src="js/corridors.js"></script>
+  <script src="js/clusters.js"></script>
+  <script src="js/wiring.js"></script>
+</body>
+
+</html>
