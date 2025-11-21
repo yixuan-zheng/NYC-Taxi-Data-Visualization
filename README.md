@@ -1,3 +1,12 @@
+DESCRIPTION
+This project provides an interactive, browser-based visualization dashboard for exploring mobility patterns in NYC taxi data. The system integrates three linked visual components: an hourly hotspot map that displays pickup intensity across New York City taxi zones, an origin–destination (OD) flow explorer that reveals major travel routes between neighborhoods, and a time-series panel that summarizes 24-hour activity patterns for spatiotemporal clusters. Together, these views allow users to examine how pickup density, travel flows, and neighborhood activity evolve throughout the day. All computations run client-side in D3.js using pre-aggregated datasets, making the dashboard lightweight and easy to run without any backend services or special software.
+INSTALLATION
+To install and set up the project, simply download or unzip the project folder on your machine. Make sure Python is installed (any recent version is acceptable), then open a terminal window inside the project directory. No libraries, frameworks, or additional dependencies are required, since all data loading and visualization logic is handled directly in the browser.
+EXECUTION
+To run the dashboard, start a simple local web server by running python -m http.server 8000 from inside the project folder. After the server starts, open your browser and navigate to http://127.0.0.1:8000/index.html to launch the integrated dashboard with all three linked views. You may also explore the simpler baseline prototypes by opening the individual HTML files located in the “Baseline Viz” folder, which include standalone versions of the hotspot map, OD-flow explorer, and time-series visualization. No additional configuration is required to run the demo.
+
+
+
 # NYC Taxi Data Visualization
 
 This repo is a lightweight prototype of three D3-based visualizations for NYC taxi data, plus a new integrated dashboard.  
