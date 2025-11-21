@@ -5,6 +5,9 @@
 This project provides an interactive, browser-based dashboard for exploring mobility patterns in NYC taxi data. It brings together three linked D3.js visual components: an hourly hotspot map that visualizes pickup intensity across taxi zones, an origin–destination flow explorer that highlights major travel corridors between neighborhoods, and a time-series panel that summarizes 24-hour activity patterns for spatiotemporal clusters. These coordinated views allow users to analyze how pickup density, travel flows, and neighborhood-level rhythms evolve throughout the day.
 All computations run entirely client-side in lightweight HTML/JS using pre-aggregated datasets, making the dashboard fast, self-contained, and easy to run without any backend services or additional software.
 
+**The source NYC Taxi & Limousine Commission (TLC) trip record data can be downloaded from:**
+**[https://www.nyc.gov/site/tlc/about/tlc-trip-record-data.page](https://www.nyc.gov/site/tlc/about/tlc-trip-record-data.page)**
+
 ## INSTALLATION
 
 Installation is minimal. Simply download or unzip the project folder to your machine. As long as Python is installed (any recent version works), no other libraries or frameworks are required. All data loading and visualization logic happens directly in the browser.
@@ -70,7 +73,7 @@ This launches the full integrated dashboard with all three coordinated views. Yo
 └── Three Questions For Viz Design.pdf
 ```
 
-# Visual Files — Description Table
+## Visual Files — Description Table
 
 | File                | Description                                                                                                                                                      |
 | ------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -83,7 +86,7 @@ This launches the full integrated dashboard with all three coordinated views. Yo
 | **js/state.js**     | Defines the shared global application state, including selected zones, corridors, hover states, and utility normalization helpers.                               |
 | **js/wiring.js**    | Loads datasets, builds global lookups, initializes all views, connects UI controls, and coordinates inter-module communication.                                  |
 
-# Data Script Files — Description Table
+## Data Script Files — Description Table
 
 | File                                            | Description                                                                                                                 |
 | ----------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------- |
@@ -113,3 +116,6 @@ Requires:
 * **flows.html** — uses zones, flows, lookup
 * **map.html** — uses zones, spatiotemporal clusters
 * **timeseries.html** — uses cluster timeseries + semantics
+
+**You can also access the hosted version directly at:**
+**[https://yixuan-zheng.github.io/NYC-Taxi-Data-Visualization/](https://yixuan-zheng.github.io/NYC-Taxi-Data-Visualization/)**
