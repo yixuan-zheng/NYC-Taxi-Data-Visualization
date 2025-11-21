@@ -55,7 +55,7 @@ function initHotMap() {
 
   hotSvg.call(hotZoom);
 
-  // 🔹 NEW: click on whitespace in the hotspot map to clear selection
+  // Click on whitespace in the hotspot map to clear selection
   hotSvg.on("click", (event) => {
     // Ignore if we're mid auto-zoom animation
     if (typeof isAutoZooming !== "undefined" && isAutoZooming) return;

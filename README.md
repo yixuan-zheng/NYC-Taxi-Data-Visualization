@@ -1,18 +1,32 @@
-DESCRIPTION
-This project provides an interactive, browser-based visualization dashboard for exploring mobility patterns in NYC taxi data. The system integrates three linked visual components: an hourly hotspot map that displays pickup intensity across New York City taxi zones, an origin–destination (OD) flow explorer that reveals major travel routes between neighborhoods, and a time-series panel that summarizes 24-hour activity patterns for spatiotemporal clusters. Together, these views allow users to examine how pickup density, travel flows, and neighborhood activity evolve throughout the day. All computations run client-side in D3.js using pre-aggregated datasets, making the dashboard lightweight and easy to run without any backend services or special software.
-INSTALLATION
-To install and set up the project, simply download or unzip the project folder on your machine. Make sure Python is installed (any recent version is acceptable), then open a terminal window inside the project directory. No libraries, frameworks, or additional dependencies are required, since all data loading and visualization logic is handled directly in the browser.
-EXECUTION
-To run the dashboard, start a simple local web server by running python -m http.server 8000 from inside the project folder. After the server starts, open your browser and navigate to http://127.0.0.1:8000/index.html to launch the integrated dashboard with all three linked views. You may also explore the simpler baseline prototypes by opening the individual HTML files located in the “Baseline Viz” folder, which include standalone versions of the hotspot map, OD-flow explorer, and time-series visualization. No additional configuration is required to run the demo.
-
-
-
 # NYC Taxi Data Visualization
 
-This repo is a lightweight prototype of three D3-based visualizations for NYC taxi data, plus a new integrated dashboard.  
-If you clone it and run a simple local web server, it should work out of the box with the sample data in `data/`.
+## DESCRIPTION
 
-It’s intentionally simple — you are **highly encouraged** to expand it (more interactions, filters, styling, new datasets), **but please don’t push directly to `main`**. Create your own branch and open a PR.
+This project provides an interactive, browser-based dashboard for exploring mobility patterns in NYC taxi data. It brings together three linked D3.js visual components: an hourly hotspot map that visualizes pickup intensity across taxi zones, an origin–destination flow explorer that highlights major travel corridors between neighborhoods, and a time-series panel that summarizes 24-hour activity patterns for spatiotemporal clusters. These coordinated views allow users to analyze how pickup density, travel flows, and neighborhood-level rhythms evolve throughout the day.
+All computations run entirely client-side in lightweight HTML/JS using pre-aggregated datasets, making the dashboard fast, self-contained, and easy to run without any backend services or additional software.
+
+## INSTALLATION
+
+Installation is minimal. Simply download or unzip the project folder to your machine. As long as Python is installed (any recent version works), no other libraries or frameworks are required. All data loading and visualization logic happens directly in the browser.
+
+## EXECUTION
+
+To run the dashboard:
+
+1. Open a terminal in the project directory.
+
+2. Start a lightweight local web server:
+
+   ```bash
+   python -m http.server 8000
+   ```
+
+3. In your browser, open:
+
+   **[http://127.0.0.1:8000/index.html](http://127.0.0.1:8000/index.html)**
+
+This launches the full integrated dashboard with all three coordinated views. You can also explore simpler standalone prototypes located in the **Baseline Viz** folder, which include separate versions of the hotspot map, OD-flow explorer, and time-series visualization. No additional setup is required.
+
 
 ## Repo Structure
 
@@ -25,13 +39,26 @@ It’s intentionally simple — you are **highly encouraged** to expand it (more
 ├── css
 │   └── main.css
 ├── data
-│   ├── cluster_semantics.json
 │   ├── cluster_semantics_t.json
+│   ├── cluster_semantics.json
+│   ├── cluster_timeseries.csv
 │   ├── clusters_spatiotemporal.csv
+│   ├── daily_zone_hour.parquet
 │   ├── flows.csv
 │   ├── taxi_zone_lookup.csv
 │   ├── taxi_zones.geojson
-│   └── timeseries.csv
+│   ├── zone_centroids.geojson
+│   ├── zone_hour_clusters.parquet
+│   └── zone_hour_density.parquet
+├── data script
+│   ├── build_flow_cluster_semantics.py
+│   ├── build_zone_cluster_semantics.py
+│   ├── build_zone_hour_clusters.py
+│   ├── clean.py
+│   ├── cluster_timeseries.py
+│   ├── compute_clusters.py
+│   └── compute_flow.py
+├── index.html
 ├── js
 │   ├── clusters.js
 │   ├── corridors.js
@@ -39,124 +66,50 @@ It’s intentionally simple — you are **highly encouraged** to expand it (more
 │   ├── odmap.js
 │   ├── state.js
 │   └── wiring.js
-├── index.html
-├── .gitignore
 ├── README.md
 └── Three Questions For Viz Design.pdf
 ```
 
-### What each part is
+# Visual Files — Description Table
 
-* **`data/`** — all the backing data files the HTML pages fetch via D3.
+| File                | Description                                                                                                                                                      |
+| ------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **index.html**      | Main dashboard interface combining the hotspot map, OD map, and cluster time-series panel; loads scripts, defines layout, and initializes all visual components. |
+| **css/main.css**    | Global styling for layout, maps, legends, tooltips, controls, and panels; ensures consistent and responsive formatting.                                          |
+| **js/clusters.js**  | Implements the cluster time-series view, draws 24-hour activity curves, ranks top clusters, and synchronizes map–timeseries interactions.                        |
+| **js/corridors.js** | Handles corridor search logic, alias normalization, borough inference, and mapping text queries to canonical corridor keys.                                      |
+| **js/hotmap.js**    | Renders the hotspot/choropleth map with hourly intensity coloring, zoom behavior, hover states, and cross-linked selections.                                     |
+| **js/odmap.js**     | Renders the OD flow map with polygons, centroids, arcs, corridor filtering, tooltips, and zoom/selection behavior.                                               |
+| **js/state.js**     | Defines the shared global application state, including selected zones, corridors, hover states, and utility normalization helpers.                               |
+| **js/wiring.js**    | Loads datasets, builds global lookups, initializes all views, connects UI controls, and coordinates inter-module communication.                                  |
 
-  * `taxi_zones.geojson` — NYC TLC zone boundaries (polygons) with `LocationID`, `Zone`, `Borough`.
-  * `taxi_zone_lookup.csv` — lookup table to turn `LocationID` into human-readable zone/borough names.
-  * `flows.csv` — zone-to-zone trip flows by hour.
-  * `clusters_spatiotemporal.csv` — output from a spatiotemporal clustering step (per zone, per hour stats).
-  * `timeseries.csv` — per-cluster, per-hour time series (used in the line chart dashboard).
-  * `cluster_semantics.json` — optional metadata to make cluster names nicer (e.g. show “JFK – Queens” instead of “Cluster 7”).
+# Data Script Files — Description Table
 
-* **`css/main.css`** — shared styling for the integrated dashboard.
+| File                                            | Description                                                                                                                 |
+| ----------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------- |
+| **data script/clean.py**                        | Cleans raw FHVHV trips and creates zone-hour density tables and a sampled-trips file for downstream analysis.               |
+| **data script/compute_clusters.py**             | Computes spatial and spatiotemporal DBSCAN clusters for zones and zone-hours, generating cluster labels and zone centroids. |
+| **data script/compute_flow.py**                 | Aggregates trips into OD flows and clusters them into corridor-style flow groups using direction and distance features.     |
+| **data script/build_zone_hour_clusters.py**     | Merges spatiotemporal cluster labels with the full zone-hour universe to produce a unified cluster mapping.                 |
+| **data script/cluster_timeseries.py**           | Builds cluster-level time series and computes stability metrics such as DTW, autocorrelation, and SNR.                      |
+| **data script/build_flow_cluster_semantics.py** | Generates human-readable labels for flow clusters (e.g., “Midtown ↔ JFK”) using alias rules and zone lookups.               |
+| **data script/build_zone_cluster_semantics.py** | Produces semantic summaries for zone-hour clusters, assigning area names and time-of-day categories.                        |
 
-* **`js/`** — modular JavaScript for the new dashboard:
-  * `hotmap.js` — hourly hotspot / choropleth map.
-  * `odmap.js` — OD flow map (zone-to-zone links).
-  * `cluster.js` — cluster list + time-series wiring.
-  * `corridors.js` — helpers for OD “corridor” summaries.
-  * `state.js` — shared UI state (selected hour, cluster, filters, etc.).
-  * `wiring.js` — boots the app and connects UI controls to the modules.
+## Views and Data Dependencies
 
-* **`Baseline Viz/`** — original standalone prototype HTMLs:
-  * `flows.html` — baseline zone-to-zone flow view.
-  * `map.html` — baseline hotspot / cluster choropleth.
-  * `timeseries.html` — baseline time-series dashboard.
- 
-* **`Three Questions For Viz Design.pdf`** — design brief / reading for the project.
+### Integrated Dashboard — `index.html`
 
-## Views and data dependencies
+Requires:
 
-### 1. Integrated dashboard `index.html`
+* `taxi_zones.geojson`
+* `taxi_zone_lookup.csv`
+* `flows.csv`
+* `clusters_spatiotemporal.csv`
+* `cluster_timeseries.csv`
+* Optional: `cluster_semantics.json`, `cluster_semantics_t.json`
 
-A single page with three linked views: hourly hotspot map, OD flow explorer, and cluster time-series panel.
+### Baseline Prototypes
 
-**Requires:**
-
-* `data/taxi_zones.geojson`
-* `data/taxi_zone_lookup.csv`
-* `data/flows.csv`
-* `data/clusters_spatiotemporal.csv`
-* `data/timeseries.csv`
-* `data/cluster_semantics.csv`
-
-**What it does:**
-
-* Shows hourly hotspots as a choropleth over NYC taxi zones.
-* Lets you explore OD flows between zones for the selected hour.
-* Lists clusters and shows the 24-hour pattern for a selected cluster.
-* Shares filters (e.g., hour, selected cluster/zone) across all three views.
-
-### 2. Baseline prototypes (`Baseline Viz/*.html`)
-
-Simpler, stand-alone versions of each view. They are useful for debugging or comparing against the integrated dashboard.
-
-- **`Baseline Viz/flows.html`** — interactive OD flow map.
-  - **Requires:**
-    - `data/taxi_zones.geojson`
-    - `data/flows.csv`
-    - `data/taxi_zone_lookup.csv` *(used to show nicer names; if missing, labels fall back to IDs)*
-
-- **`Baseline Viz/map.html`** — time-weighted / spatiotemporal cluster choropleth.
-  - **Requires:**
-    - `data/taxi_zones.geojson`
-    - `data/clusters_spatiotemporal.csv`
-  - **Expected columns in `clusters_spatiotemporal.csv`:**
-    - `LocationID`
-    - `hour`
-    - `cluster_id`
-    - `intensity_hour`
-    - *(optionally)* `avg_fare_hour`, `avg_duration_min_hour`
-
-- **`Baseline Viz/timeseries.html`** — simple “top clusters” time-series view.
-  - **Requires:**
-    - `data/timeseries.csv`
-    - `data/cluster_semantics.json` *(optional)*
-  - **Expected columns in `timeseries.csv`:**
-    - `cluster_id`
-    - `time_bin` (0–23)
-    - `trip_count`
-      
-## How to Run Locally
-
-Because the HTML files use `d3.csv(...)` / `d3.json(...)`, you should serve the folder, not open the HTML with `file://`.
-
-From the project root:
-
-```bash
-python -m http.server 8000
-```
-
-Then open in your browser:
-
-- **Main dashboard:**
-  - [http://127.0.0.1:8000/index.html](http://127.0.0.1:8000/index.html)
-
-- **Baseline prototypes (optional):**
-  - [http://127.0.0.1:8000/Baseline%20Viz/flows.html](http://127.0.0.1:8000/Baseline%20Viz/flows.html)
-  - [http://127.0.0.1:8000/Baseline%20Viz/map.html](http://127.0.0.1:8000/Baseline%20Viz/map.html)
-  - [http://127.0.0.1:8000/Baseline%20Viz/timeseries.html](http://127.0.0.1:8000/Baseline%20Viz/timeseries.html)
-
-## Contributing
-
-1. **Create a new branch** — don’t push straight to `main`:
-
-   ```bash
-   git checkout -b feature/my-improvement
-   ```
-2. Make your changes (new filters, better legends, new datasets).
-3. Commit and open a PR.
-
-## Notes
-
-* This is a **prototype**: structure is flat on purpose.
-* Data files are small and included directly to make it easy to clone and run.
-* If you change filenames in `data/`, make sure to update the corresponding `.html` file where `d3.csv(...)` or `d3.json(...)` is called.
+* **flows.html** — uses zones, flows, lookup
+* **map.html** — uses zones, spatiotemporal clusters
+* **timeseries.html** — uses cluster timeseries + semantics

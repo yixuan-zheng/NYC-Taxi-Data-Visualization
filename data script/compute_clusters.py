@@ -9,7 +9,6 @@ import math
 import numpy as np
 import pandas as pd
 
-# You may need to `pip install geopandas shapely pyproj scikit-learn`
 import geopandas as gpd
 from shapely.geometry import Point
 from sklearn.cluster import DBSCAN
@@ -355,9 +354,9 @@ def main():
     st.to_csv(OUT_SPATIOTEMPORAL_CSV, index=False)
     export_zone_centroids_gj(centroids)
 
-    print("✅ Wrote:", OUT_SPATIAL_CSV)
-    print("✅ Wrote:", OUT_SPATIOTEMPORAL_CSV)
-    print("✅ Wrote:", OUT_ZONE_CENTROIDS_GJ)
+    print("Wrote:", OUT_SPATIAL_CSV)
+    print("Wrote:", OUT_SPATIOTEMPORAL_CSV)
+    print("Wrote:", OUT_ZONE_CENTROIDS_GJ)
 
 
 if __name__ == "__main__":

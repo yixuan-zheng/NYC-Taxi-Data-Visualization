@@ -37,7 +37,7 @@ function canonicalCorridorKeyFromLabel(label) {
 }
 
 /**
- * Try to infer a concrete taxi zone id from a corridor alias like "Midtown" or "JFK".
+ * Build a concrete taxi zone id from a corridor alias.
  * Case-insensitive, fuzzy "contains" match on zone names.
  */
 function guessZoneIdForAlias(label) {
@@ -75,7 +75,7 @@ function buildCorridorSearchIndex() {
     }
   });
 
-  // 2) Corridor endpoints from semantics (labels like "Midtown ↔ JFK")
+  // 2) Corridor endpoints from semantics 
   const endpointPairs = [];
   if (semantics) {
     Object.keys(semantics).forEach(k => {
@@ -159,7 +159,7 @@ function buildCorridorSearchIndex() {
     });
   }
 
-  // Optional fallback: if some aliases still have no boroughs, try to infer
+  // Fallback: if some aliases still have no boroughs, try to infer
   // from zone names.
   corridorOriginOptions.forEach(alias => {
     if (aliasToBoroughs.has(alias)) return;   // already has borough info
@@ -179,7 +179,6 @@ function buildCorridorSearchIndex() {
     });
   });
 
-  // IMPORTANT:
   // We do NOT pre-populate corridorOriginList here anymore.
   // The datalist will be filled dynamically on `input` (type-to-search),
   // so the field no longer behaves like a giant dropdown.
@@ -189,7 +188,7 @@ function buildCorridorSearchIndex() {
 }
 
 /**
- * Given user input that looks like a borough ("manhattan", "queens", etc.),
+ * Given user input that looks like a borough,
  * return all corridor aliases whose underlying zones belong to that borough.
  */
 function getAliasesForBoroughSearch(input) {
@@ -202,7 +201,7 @@ function getAliasesForBoroughSearch(input) {
     for (const borough of boroughSet) {
       const bLower = String(borough).toLowerCase();
       // case-insensitive partial match:
-      // "manh", "MANHATTAN", "Manhattan, NY" all work
+      // "manh", "MANHATTAN", "Manhattan" all work
       if (bLower.includes(q) || q.includes(bLower)) {
         result.push(alias);
         break; // go to next alias once this one matched
@@ -491,7 +490,7 @@ function bindCorridorEvents() {
       const key = canonicalCorridorKeyFromLabel(rawLabel);
       if (!key) return;
 
-      // 🔹 Highest priority: reset the whole view to default (all boroughs).
+      // Highest priority: reset the whole view to default (all boroughs).
       // 1) Force borough filter back to "__all__"
       const boroFilterEl = document.getElementById("boroughFilter");
       if (boroFilterEl) {

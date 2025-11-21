@@ -1,6 +1,6 @@
 // ===== Cluster time-series view (right panel, "Cluster time patterns") =====
 
-// We'll build a small derived structure if data exists
+// Build a small derived structure if data exists
 let clusterById = new Map();
 let clusterTopList = [];   // now becomes a list of AREA entries
 
@@ -110,7 +110,7 @@ function readableClusterLabel(clusterId) {
  * Time-series version: label for spatiotemporal zone clusters.
  * Uses cluster_semantics_t.json (exposed as window.semanticsTime).
  * - Prefer info.label (area alias)
- * - Optionally append the top zone name if it's meaningfully different
+ * - Append the top zone name if it's meaningfully different
  * - Strip any trailing "(...)" suffix (AM peak, Late night, etc.).
  */
 function readableTimeClusterLabel(clusterId) {
@@ -128,16 +128,16 @@ function readableTimeClusterLabel(clusterId) {
     return String(s).replace(/\s*\([^)]*\)\s*$/, "").trim();
   }
 
-  // Base label from semantics (e.g. "LaGuardia", "Queens (Late night)")
+  // Base label from semantics 
   const rawBase = info.label || `Cluster ${clusterId}`;
   const base = stripParenSuffix(rawBase);
 
-  // First top zone name, if present (e.g. "LaGuardia Airport", "Saint Albans")
+  // First top zone name, if present
   const topZones = Array.isArray(info.top_zones) ? info.top_zones : [];
   const primaryZoneRaw = topZones.length ? topZones[0] : null;
   const primaryZone = primaryZoneRaw ? stripParenSuffix(primaryZoneRaw) : null;
 
-  // If no top zone, just return the base alias
+  // If no top zone, return the base alias
   if (!primaryZone) {
     return base;
   }
@@ -146,26 +146,15 @@ function readableTimeClusterLabel(clusterId) {
   const baseNorm = base.toLowerCase();
   const zoneNorm = primaryZone.toLowerCase();
 
-  // If they are basically the same thing (one contains the other),
-  // avoid redundancy: just show the base.
-  //
-  // Examples:
-  //   base = "JFK", primaryZone = "JFK Airport"
-  //     => "jfk" in "jfk airport" => return "JFK"
-  //
-  //   base = "Queens", primaryZone = "Saint Albans"
-  //     => no overlap => return "Queens — Saint Albans"
   if (baseNorm && zoneNorm && (baseNorm.includes(zoneNorm) || zoneNorm.includes(baseNorm))) {
     return base;
   }
-
-  // Otherwise, use "Base — TopZone"
   return `${base} — ${primaryZone}`;
 }
 
 /**
  * Get an area-level key for a time cluster.
- * We use semanticsTime[label] and strip any "(AM peak)", "(Late night)", etc.
+ * Use semanticsTime[label] and strip any "(AM peak)", "(Late night)", etc.
  * So multiple time-window clusters for "LaGuardia – LaGuardia Airport"
  * collapse into the same areaKey.
  */
@@ -192,7 +181,6 @@ function renderClusterTable() {
     .append("tr")
     .attr("data-area", d => d.areaKey)
     .on("click", (event, d) => {
-      // d is now an AREA entry
       renderClusterDetail(d);
       highlightClusterRow(d.areaKey);
 
@@ -201,7 +189,7 @@ function renderClusterTable() {
         window.setActiveTimeClusterOnMap(d.topClusterId);
       }
 
-      // Optionally expose active area if you want map logic to union clusters later:
+      // Expose active area
       window.activeTimeClusterArea = d;
     });
 
@@ -213,7 +201,7 @@ function renderClusterTable() {
 
   rows.append("td")
     .style("padding", cellPadding)
-    .text(d => d.areaKey);  // already a clean label like "LaGuardia – LaGuardia Airport"
+    .text(d => d.areaKey); 
 
   rows.append("td")
     .style("padding", cellPadding)
@@ -338,7 +326,7 @@ function renderClusterDetail(areaEntry) {
     .attr("stroke-width", 2)
     .attr("d", line);
 
-  // Axes (unchanged)
+  // Axes 
   const xAxis = d3.axisBottom(x).ticks(12);
   const yAxis = d3.axisLeft(y).ticks(4).tickFormat(d3.format(","));
 
@@ -509,8 +497,6 @@ function initClustersView() {
     clusterDetailEl.style.width = "100%";
   }
 
-  // Render the table only. Do NOT draw the chart yet,
-  // because #clusterView is still display:none on first load.
   if (clusterTopList.length) {
     renderClusterTable();
     // DO NOT call renderClusterDetail here

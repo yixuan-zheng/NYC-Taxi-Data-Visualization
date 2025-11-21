@@ -1,20 +1,14 @@
-# === NYC FHVHV Cluster Time-Series Stability (Spatiotemporal Only) ===
+# === NYC FHVHV Cluster Time-Series Stability (Spatiotemporal) ===
 # Inputs (all in data/):
-#   data/zone_hour_clusters_final.parquet  # PULocationID, hour, cluster_st  (REFINED)
-#   data/cleaned_fhvhv_trips.parquet       # full cleaned Jan trips (19.7M rows)
+#   data/zone_hour_clusters.parquet        # PULocationID, hour, cluster_st
+#   data/cleaned_fhvhv_trips.parquet       # full cleaned trips 
 #
 # Auto-generated cache (also in data/):
 #   data/daily_zone_hour.parquet           # (date, hour, PULocationID) → trip_count [+ total_fare]
 #
 # Outputs (all in data/):
 #   data/cluster_timeseries.csv        # hourly demand per (refined) cluster
-#   data/cluster_ts_metrics.csv            # DTW/ACF/SNR per cluster
-#
-# Metrics:
-#   • DTW↓  = more consistent daily shape
-#   • ACF1↑ = 1-hour autocorr
-#   • ACF24↑= same-hour-next-day autocorr
-#   • SNR↑  = stronger hour-of-day signal (vs noise)
+#   data/cluster_ts_metrics.csv        # DTW/ACF/SNR per cluster
 #
 
 INCLUDE_FARES = True
@@ -88,7 +82,6 @@ lab = (
     .drop_duplicates()
 )
 
-# Optional sanity print
 print("\nRefined cluster_st distribution (first 20):")
 print(lab["cluster_st"].value_counts().head(20))
 

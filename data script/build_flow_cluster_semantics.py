@@ -3,7 +3,7 @@
 Build semantic labels for flow clusters from flows.csv.
 
 Usage (basic):
-    python build_cluster_semantics.py \
+    python build_flow_cluster_semantics.py \
         --flows data/flows.csv \
         --lookup data/taxi_zone_lookup.csv \
         --out cluster_semantics.json

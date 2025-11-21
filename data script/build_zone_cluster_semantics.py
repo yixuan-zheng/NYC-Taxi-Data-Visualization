@@ -24,7 +24,6 @@ import pandas as pd
 # 1. Canonical NYC area aliases
 # -------------------------------------------------------------------
 # Map a canonical area label -> list of substrings that identify that area.
-# You can keep expanding this as needed.
 CANONICAL_AREAS: dict[str, list[str]] = {
     # --- Airports ---
     "JFK (Queens)": [

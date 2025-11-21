@@ -925,7 +925,7 @@ function initODMap() {
     }
   }
 
-  // ----- NEW: render many-to-many corridor overview -----
+  // ----- Render many-to-many corridor overview -----
   function renderCorridorOverview(corridorKey) {
     // Use canonical key so it matches how semantics are grouped
     const canonicalKey = window.canonicalCorridorKeyFromLabel
@@ -1115,7 +1115,7 @@ function initODMap() {
           odTip.style("opacity", 0);
         })
         .on("click", (event) => {
-          // IMPORTANT: prevent click from reaching odSvg (which would reset the view)
+          // Prevent click from reaching odSvg (which would reset the view)
           event.stopPropagation();
 
           // Leaving corridor overview; clear the overview zone cache.

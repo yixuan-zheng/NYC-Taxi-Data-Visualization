@@ -4,7 +4,7 @@
 #   data/flows_enhanced.csv
 #
 # Requires:
-#   artifacts/sample_trips.parquet
+#   trips.parquet
 #   data/taxi_zones.geojson
 #
 # pip install pandas numpy geopandas shapely pyproj scikit-learn
@@ -186,8 +186,8 @@ def main():
 
     baseline.to_csv(OUT_BASELINE, index=False)
     enhanced.to_csv(OUT_ENHANCED, index=False)
-    print("✅ Wrote", OUT_BASELINE)
-    print("✅ Wrote", OUT_ENHANCED)
+    print("Wrote", OUT_BASELINE)
+    print("Wrote", OUT_ENHANCED)
 
 if __name__ == "__main__":
     main()
