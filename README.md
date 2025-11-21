@@ -1,7 +1,5 @@
 # NYC Taxi Data Visualization
 
-# NYC Taxi Data Visualization
-
 This repo is a lightweight prototype of three D3-based visualizations for NYC taxi data, plus a new integrated dashboard.  
 If you clone it and run a simple local web server, it should work out of the box with the sample data in `data/`.
 
